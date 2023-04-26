@@ -19,4 +19,4 @@ if __name__ == "__main__":
           f"{CLEAR}Test"
           f"{BOLD}Test{CLEAR}"
           f"{UNDERLINE}Test{CLEAR}"
-    )
+          )

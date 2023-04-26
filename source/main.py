@@ -1,11 +1,18 @@
+import random
+
 from agent_importer import import_agent
 from core.agent import Agent
 from core.board import Board, beautify_board
+from core.colours import GREEN, CLEAR, RED
+from core.game import Game
+from core.game_state import GameState
 
 
 def main():
     # Handle command line args
     config = create_config()
+
+    random.seed(0)
 
     # Try load agents
     agent1_file = config["agent1"]
@@ -19,6 +26,19 @@ def main():
 
     board = Board()
     board.create((7, 6))
+
+    game = Game(agent1, agent2, board)
+    while game.running:
+        game.tick()
+    print(beautify_board(board))
+
+    if game.game_state == GameState.PLAYER1_WON:
+        print(f"{GREEN}Player 1 Won")
+    if game.game_state == GameState.PLAYER2_WON:
+        print(f"{RED}Player 2 Won")
+    if game.game_state == GameState.TIE:
+        print(f"{CLEAR}Game ended in a tie")
+    print(CLEAR)
 
 
 def create_config():
