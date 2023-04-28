@@ -1,12 +1,12 @@
 import pygame
 
 test_board = [
-    [None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None],
-    [None, 1, None, 2, None, None, None],
-    [1, 2, 1, 1, 2, None, 2]
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 2, 0, 0, 0],
+    [1, 2, 1, 1, 2, 0, 2]
 ]
 
 def visualise(board):
@@ -39,10 +39,9 @@ def visualise(board):
             for col in range(len(board[0])):
                 if board[row][col] == 1:
                     screen.blit(red_scaled, (col * SLOT_SIZE, row * SLOT_SIZE))
-
                 elif board[row][col] == 2:
                     screen.blit(yellow_scaled, (col * SLOT_SIZE, row * SLOT_SIZE))
-                else:
+                elif board[row][col] == 0:
                     color = (255, 255, 255)
                     screen.blit(empty_scaled, (col * SLOT_SIZE, row * SLOT_SIZE))
 
@@ -61,3 +60,5 @@ def visualise(board):
 
 def test():
     return visualise(test_board)
+
+test()
