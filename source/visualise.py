@@ -1,24 +1,24 @@
 import pygame
 
-test_board = [
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 1, 0, 2, 0, 0, 0],
-    [1, 2, 1, 1, 2, 0, 2]
-]
+# test_board = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0],
+# [0, 0, 0, 0, 0, 0, 0],[0, 1, 0, 2, 0, 0, 0], [1, 2, 1, 1, 2, 0, 2]]
 
-def visualise(board):
+
+def visualise(board: list[list[int]]):
     """
     :param board: a 2d array with None, 1 or 2 in each subarray
     :return: a pygame instance displaying the board. It does not indicate a winning move.
     """
+    width = len(board[0])
+    height = len(board)
 
-    SLOT_SIZE = 105
-    BOARD_WIDTH = len(board[0]) * SLOT_SIZE
-    BOARD_HEIGHT = len(board) * SLOT_SIZE
+    piece_size = 90
+    spacing = 5
+    padding = 20
 
+    cell_size = piece_size + 2 * spacing
+    screen_width = width * cell_size + 2 * padding
+    screen_height = height * cell_size + 2 * padding
 
     red_chip = pygame.image.load("assets/images/redchip.png")
     yellow_chip = pygame.image.load("assets/images/yellowchip.png")
@@ -31,22 +31,24 @@ def visualise(board):
     empty_scaled = pygame.transform.scale(empty, updated_size)
 
     pygame.display.set_caption("Connect-X Visualisation Demo")
+    background_colour = (42, 42, 199)
 
     def draw_board(board):
-        pygame.draw.rect(screen, (42, 42, 199), (0, 0, BOARD_WIDTH, BOARD_HEIGHT))
+        pygame.draw.rect(screen, background_colour, (0, 0, screen_height, screen_width))
 
-        for row in range(len(board)):
-            for col in range(len(board[0])):
-                if board[row][col] == 1:
-                    screen.blit(red_scaled, (col * SLOT_SIZE, row * SLOT_SIZE))
-                elif board[row][col] == 2:
-                    screen.blit(yellow_scaled, (col * SLOT_SIZE, row * SLOT_SIZE))
-                elif board[row][col] == 0:
-                    color = (255, 255, 255)
-                    screen.blit(empty_scaled, (col * SLOT_SIZE, row * SLOT_SIZE))
+        for col in range(height):
+            for row in range(width):
+                piece = board[col][height - row - 2]
+                position = (col * cell_size + padding + spacing, row * cell_size + padding + spacing)
+                if piece == 1:
+                    screen.blit(red_scaled, position)
+                elif piece == 2:
+                    screen.blit(yellow_scaled, position)
+                elif piece == 0:
+                    screen.blit(empty_scaled, position)
 
     pygame.init()
-    screen = pygame.display.set_mode((BOARD_WIDTH, BOARD_HEIGHT))
+    screen = pygame.display.set_mode((screen_height, screen_width))
 
     while True:
         # Handle events
@@ -58,7 +60,36 @@ def visualise(board):
             draw_board(board)
             pygame.display.flip()
 
-def test():
-    return visualise(test_board)
 
-test()
+def create_config():
+    import argparse
+    parser = argparse.ArgumentParser(description="Visualises a Connect 4 game.",
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("board", help="Board state to display")
+    args = parser.parse_args()
+    config = vars(args)
+    return config
+
+
+def main():
+    config = create_config()
+
+    board_value = config["board"].strip()
+    board = []
+    try:
+        for row_value in board_value[1: -1].split("],"):
+            row = []
+            for piece in row_value.strip()[1:]:
+                if piece.isdigit():
+                    row.append(int(piece))
+            board.append(row)
+    except:
+        print("Error parsing board state")
+        raise
+
+    print(board)
+    visualise(board)
+
+
+if __name__ == "__main__":
+    main()
