@@ -13,6 +13,8 @@ def main():
     config = create_config()
 
     random.seed(0)
+    # random.seed(8)
+    # random.seed(40)
 
     # Try load agents
     agent1_file = config["agent1"]
@@ -31,6 +33,7 @@ def main():
     while game.running:
         game.tick()
     print(beautify_board(board))
+    print(board.to_array())
 
     if game.game_state == GameState.PLAYER1_WON:
         print(f"{GREEN}Player 1 Won")
