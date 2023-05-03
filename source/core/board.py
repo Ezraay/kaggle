@@ -21,10 +21,13 @@ class Board:
         return self.__size[1]
 
     def can_make_move(self, x: int):
-        return self.__heights[x] < self.height
+        return self.get_height_at(x) < self.height
+
+    def get_height_at(self, x: int):
+        return self.__heights[x]
 
     def make_move(self, x: int, piece: int):
-        self.__board[x][self.__heights[x]] = piece
+        self.__board[x][self.get_height_at(x)] = piece
         self.__heights[x] += 1
 
     def get_board_state(self, in_a_row: int) -> GameState:

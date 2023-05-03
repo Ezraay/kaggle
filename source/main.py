@@ -30,10 +30,12 @@ def main():
     board.create((7, 6))
 
     game = Game(agent1, agent2, board)
-    while game.running:
-        game.tick()
+    game.tick_to_completion()
     print(beautify_board(board))
+    print("\nBoard State:")
     print(board.to_array())
+    print("\nHistory:")
+    print(game.history)
 
     if game.game_state == GameState.PLAYER1_WON:
         print(f"{GREEN}Player 1 Won")
