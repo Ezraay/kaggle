@@ -12,7 +12,8 @@ def main():
     # Handle command line args
     config = create_config()
 
-    random.seed(0)
+    if config["seed"] != None:
+        random.seed(config["seed"])
     # random.seed(8)
     # random.seed(40)
 
@@ -52,6 +53,7 @@ def create_config():
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("agent1", help="Path to first player's agent")
     parser.add_argument("agent2", help="Path to second player's agent")
+    parser.add_argument("--seed", help="Seed for random module", required=False, type=int)
     args = parser.parse_args()
     config = vars(args)
     return config
