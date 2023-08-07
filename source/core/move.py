@@ -10,7 +10,8 @@ class Move:
             The y-coordinate (row) where the piece lands after being dropped.
         piece: int
             The identifier for the piece being placed (typically representing a player or agent).
-        """
+    """
+
     def __init__(self, x: int, y: int, piece: int):
         """
         Initializes a move with given x-coordinate, y-coordinate, and piece identifier.

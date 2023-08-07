@@ -6,26 +6,26 @@ from core.move import Move
 
 class Game:
     '''
-    A class to represent the ConnectX game.
+        A class to represent the ConnectX game.
 
-    Attributes:
-    ----------
-    __agent1: Agent
-        The first agent/player.
-    __agent2: Agent
-        The second agent/player.
-    __board: Board
-        The game board instance.
-    __turn: int
-        Current turn number. (0 for agent1 and 1 for agent2)
-    __in_a_row: int
-        The number of pieces in a row required for a win. Default is 4.
-    history: list[Move]
-        List of moves made in the game.
-    game_state: GameState
-        The current state of the game.
-    running: bool
-        Boolean indicating if the game is still in progress.
+        Attributes:
+        ----------
+        __agent1: Agent
+            The first agent/player.
+        __agent2: Agent
+            The second agent/player.
+        __board: Board
+            The game board instance.
+        __turn: int
+            Current turn number. (0 for agent1 and 1 for agent2)
+        __in_a_row: int
+            The number of pieces in a row required for a win. Default is 4.
+        history: list[Move]
+            List of moves made in the game.
+        game_state: GameState
+            The current state of the game.
+        running: bool
+            Boolean indicating if the game is still in progress.
     '''
     def __init__(self, agent1: Agent, agent2: Agent, board: Board, in_a_row=4):
         # Initializes a new game of ConnectX with given agents and board.
