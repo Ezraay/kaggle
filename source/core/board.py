@@ -8,9 +8,9 @@ EMPTY_PIECE = 0
 
 class Board:
     def create(self, size: tuple[int, int]):
-        #size[width,height] for constructing the connect 4 board
         self.__heights = [0 for _ in range(size[0])]
         self.__board = [[EMPTY_PIECE for _ in range(size[1])] for _ in range(size[0])]
+        #size[width,height] for constructing the connect 4 board
         self.__size = size
 
     @property
@@ -135,6 +135,7 @@ class Board:
         return self.__board
 
     def __str__(self):
+        # return result in an array form
         result = ""
         for y in range(self.__size[1] - 1, -1, -1):
             for x in range(self.__size[0]):
