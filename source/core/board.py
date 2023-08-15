@@ -131,7 +131,7 @@ class Board:
                 result += "[" + str(self.__board[x][y]) + "]"
             result += "\n"
         return result
-
+    
 
 def beautify_board(board: Board) -> str:
     board_values = str(board)
