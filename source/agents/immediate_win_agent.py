@@ -45,9 +45,10 @@ class ImmediateWinAgent(RandomAgent):
 
     def get_move(self, board: Board, my_piece: int) -> int:
         oppo_piece = PLAYER_1_PIECE if my_piece == PLAYER_2_PIECE else PLAYER_2_PIECE
-        valid_moves = [i for i in range(board.width) if board.can_make_move(i)]
+        candidate = check_winning_move(board,my_piece)
+        win_moves = [i for i in range(board.width) if board.can_make_move(i) and candidate]
         # check for immediate win move
-        for move in valid_moves:
+        for move in win_moves:
             temp_board = copy.deepcopy(board)
             temp_board.make_move(move, my_piece)
             if temp_board.get_board_state(4) in [GameState.PLAYER1_WON, GameState.PLAYER2_WON]:
