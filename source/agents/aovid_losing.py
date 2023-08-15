@@ -29,9 +29,12 @@ class Nolose(RandomAgent):
                         streak = False
                 if win:
                     return i
+        #horizontal win
         for i in options:
             if i - 3 >= 0:
                 for j in range(3):
+                    
+
                               
 
         return None
