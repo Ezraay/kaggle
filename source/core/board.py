@@ -1,3 +1,5 @@
+import sys
+sys.path.append('C:\\Users\\jacky\\Documents\\Uni\\y3s2\\FIT3163\\Project Kaggle\\kaggle\\source')
 from core.colours import GREEN, RED, CLEAR
 from core.game_state import GameState
 
@@ -11,6 +13,7 @@ class Board:
         self.__heights = [0 for _ in range(size[0])]
         self.__board = [[EMPTY_PIECE for _ in range(size[1])] for _ in range(size[0])]
         self.__size = size
+        self.history = []
 
     @property
     def width(self):
@@ -19,15 +22,21 @@ class Board:
     @property
     def height(self):
         return self.__size[1]
-
+    
     def can_make_move(self, x: int):
         return self.get_height_at(x) < self.height
 
     def get_height_at(self, x: int):
         return self.__heights[x]
+    
+    def unmake_move(self):
+        y = self.history.pop()
+        self.__board[y][self.get_height_at(y)-1] = 0
+        self.__heights[y] -= 1
 
     def make_move(self, x: int, piece: int):
         self.__board[x][self.get_height_at(x)] = piece
+        self.history.append(x)
         self.__heights[x] += 1
 
     def get_board_state(self, in_a_row: int) -> GameState:
@@ -140,3 +149,17 @@ def beautify_board(board: Board) -> str:
     board_values = board_values.replace(f"[{EMPTY_PIECE}]", CLEAR + " ' ")
     board_values += CLEAR
     return board_values
+
+b = Board()
+b.create((7,6))
+m = [3,2,3,3,4,5,2,4,2]
+p = 2
+for i in m:
+    if p == 1:
+        p = 2
+    else:
+        p = 1
+    b.make_move(i,p)
+print(b.history)
+b.unmake_move()
+print(b.history)
