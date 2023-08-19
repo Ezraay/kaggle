@@ -5,7 +5,30 @@ from core.move import Move
 
 
 class Game:
+    '''
+        A class to represent the ConnectX game.
+
+        Attributes:
+        ----------
+        __agent1: Agent
+            The first agent/player.
+        __agent2: Agent
+            The second agent/player.
+        __board: Board
+            The game board instance.
+        __turn: int
+            Current turn number. (0 for agent1 and 1 for agent2)
+        __in_a_row: int
+            The number of pieces in a row required for a win. Default is 4.
+        history: list[Move]
+            List of moves made in the game.
+        game_state: GameState
+            The current state of the game.
+        running: bool
+            Boolean indicating if the game is still in progress.
+    '''
     def __init__(self, agent1: Agent, agent2: Agent, board: Board, in_a_row=4):
+        # Initializes a new game of ConnectX with given agents and board.
         self.__agent1 = agent1
         self.__agent2 = agent2
         self.__board = board
@@ -16,7 +39,14 @@ class Game:
         self.game_state = GameState.IN_PROGRESS
         self.running = True
 
+
     def tick(self):
+        # Performs a single game move for the current agent. Updates game state.
+        '''
+        Executes a move for the current agent. If the move is invalid, raises an exception.
+        Checks for game over after the move.
+        '''
+
         current_agent = self.__agent1 if self.__turn == 0 else self.__agent2
         my_piece = self.__turn % 2 + 1
         move = current_agent.get_move(self.__board, my_piece)
@@ -31,9 +61,17 @@ class Game:
             self.running = False
 
     def tick_to_completion(self):
+        # Continues the game until completion.
+        """
+        keeps excuting moves until game ended
+        """
         while self.running:
             self.tick()
 
     def __is_game_over(self):
+        # Checks if the game has ended and updates the game_state attribute.
+        """
+        Checks the current board state and returns a boolean indicating if the game has ended.
+        """
         self.game_state = self.__board.get_board_state(self.__in_a_row)
         return self.game_state != GameState.IN_PROGRESS
