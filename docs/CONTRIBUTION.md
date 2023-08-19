@@ -12,6 +12,31 @@ The project is split into separate folders for separate concerns of the project.
 For instance, the `docs/` folder contains important documentation. The `source/` folder contains all the scripts and
 code for the project.
 
+## Working with branches
+In order to create changes in the repository, you should work in a separate branch to `develop` and `master`. To create a new branch
+use the following command or use GitHub desktop:
+```
+git checkout -b feat/your-feature-name
+```
+
+The branch name should follow the guidelines below:
+
+#### Creating a feature
+`feat/your-feature-name`
+#### Fixing a bug
+`bugfix/your-bug-name`
+#### Documentation (non-code changes)
+`docs/short-docs-description`
+
+To publish your new branch, use the following command:
+```
+git push
+```
+
+Then you can continue as usual with commits etc.
+When you are finished with your changes, create a pull request into `develop` in order to merge your changes into the branch.
+> NOTE: Do not create a pull request into `master` from your feature branch
+
 ## Initialising virtual environment
 
 Make sure to work inside the source folder, including your venv and dependencies.
