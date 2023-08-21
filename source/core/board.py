@@ -1,5 +1,6 @@
 from core.colours import GREEN, RED, CLEAR
 from core.game_state import GameState
+from core.move import Move
 
 PLAYER_1_PIECE = 1
 PLAYER_2_PIECE = 2
@@ -7,6 +8,7 @@ EMPTY_PIECE = 0
 
 
 class Board:
+
     def create(self, size: tuple[int, int]):
         self.__heights = [0 for _ in range(size[0])]
         self.__board = [[EMPTY_PIECE for _ in range(size[1])] for _ in range(size[0])]
@@ -31,6 +33,18 @@ class Board:
     def make_move(self, x: int, piece: int):
         self.__board[x][self.get_height_at(x)] = piece
         self.__heights[x] += 1
+
+    def revert(self, move: Move):
+        for row in self.__board:
+            if self.__board[move.x][move.y] != 0:
+                self.__board[move.x][move.y] = 0
+                break
+
+        x, y = self.__last_move[-1]
+        self.__board[x][y] = 0
+        self.__heights[x] -= 1
+        self.__last_move.pop()
+
 
     def get_board_state(self, in_a_row: int) -> GameState:
         

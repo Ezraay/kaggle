@@ -1,42 +1,40 @@
 import random
+import math
 
 from core.agent import Agent
-from core.board import Board
+from core.game_state import GameState
+from core.game import Game
+
 
 # https://roboticsproject.readthedocs.io/en/latest/ConnectFourAlgorithm.html
+# https://stackoverflow.com/questions/71187789/why-my-connect4-minimax-doesnt-work-properly
 
 class SmartAgent(Agent):
-    def get_move(self, board: Board, my_piece: int) -> int:
-        options = [x for x in list(range(board.width)) if board.can_make_move(x)]
-        return random.choice(options)
 
-    def evaluate_window(self, window, piece):
+    def __init__(self):
+        self.depth = 10
+
+    def evaluate_window(self, window):
+
         score = 0
-        my_piece = piece
-        if my_piece == 1:
-            opp_piece = 2
-        else:
-            opp_piece = 1
+        if window.count(1) == 4 and window.count(0) == 0:
+            score += 100000
+        elif window.count(1) == 3 and window.count(0) == 1:
+            score += 10
+        elif window.count(1) == 2 and window.count(0) == 2:
+            score += 3
 
-        # 4 - best case
-        if window.count(piece) == 4:
-            score += 100
-
-        # 3 in a row
-        elif window.count(piece) == 3 and window.count(0) == 1:
-            score += 5
-
-        # 2 in a row
-        elif window.count(piece) == 2 and window.count(0) == 2:
-            score += 2
-
-        # blocking opponent's move (but still not as good as winning)
-        if window.count(opp_piece) == 3 and window.count(0) == 1:
-            score -= 4
+        if window.count(2) == 4 and window.count(1) == 0:
+            score -= 1000000
+        elif window.count(2) == 3 and window.count(0) == 1:
+            score -= 6
+        elif window.count(2) == 2 and window.count(0) == 2:
+            score -= 2
 
         return score
 
-    def score_pos(self, board, piece):
+    def evaluate(self, board_i):
+        board = board_i.to_array()
         score = 0
         c_arr = []
         for i in range(len(board)):
@@ -44,16 +42,18 @@ class SmartAgent(Agent):
                 if j == 3:
                     c_arr.append(board[i][j])
 
-        c_count = c_arr.count(piece)
+        c_count = c_arr.count(1)
         score += c_count * 3
+
+        c_count = c_arr.count(2)
+        score -= c_count * 3
 
         # horizontal
         for r in range(len(board)):
             r_array = board[r]
             for c in range(4):
                 window = r_array[c: c + 4]
-
-                score += self.evaluate_window(window, piece)
+                score += self.evaluate_window(window)
 
         # vertical
         transposed = []
@@ -67,38 +67,80 @@ class SmartAgent(Agent):
             r_array = transposed[r]
             for c in range(4):
                 window = r_array[c: c + 4]
-                score += self.evaluate_window(window, piece)
+                score += self.evaluate_window(window)
 
         # pos diag (Up Right)
         for r in range(len(board) - 3):
             for c in range(len(board[0]) - 3):
                 window = [board[r + i][c + i] for i in range(4)]
-                score += self.evaluate_window(window, piece)
+                score += self.evaluate_window(window)
 
         # neg diag (Down Left)
         for r in range(len(board) - 3):
             for c in range(len(board[0]) - 3):
                 window = [board[r + 3 - i][c + 3 - i] for i in range(4)]
-                score += self.evaluate_window(window, piece)
-
+                score += self.evaluate_window(window)
+        print(score)
         return score
 
-    def player_ahead(self, board):
-        res = self.score_pos(board, 1) - self.score_pos(board, 2)
-        return res
+    def minimax(self, board, depth, maximiser):
+        if depth == 0 or not GameState.IN_PROGRESS:
+            return self.evaluate(board)
 
-B = [[0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 2, 0, 0, 0],
-     [0, 0, 0, 1, 0, 0, 0],
-     [0, 0, 0, 2, 2, 0, 0],
-     [0, 0, 0, 2, 1, 0, 0],
-     [0, 0, 0, 1, 2, 1, 1]]
+        # player 1 (red) wants to max
+        if maximiser:
+            max_eval = -math.inf
+            for move in range(board.width):
+                if board.can_make_move(move):
+                    board.make_move(move, 1)
+                    evalu = self.minimax(board, depth - 1, False)
+                    max_eval = max(max_eval, evalu)
+                    Game.undo()
+            return max_eval
+
+        else:
+            min_eval = math.inf
+            for move in range(board.width):
+                if board.can_make_move(move):
+                    board.make_move(move, 2)
+                    evalu = self.minimax(board, depth - 1, True)
+                    min_eval = min(min_eval, evalu)
+                    Game.undo()
+
+            return min_eval
+
+    def get_move(self, board, my_piece: int):
+        if my_piece == 1:
+            best_move = None
+            max_eval = -math.inf
+            for move in range(board.width):
+                if board.can_make_move(move):
+                    board.make_move(move, my_piece)
+                    eval = self.minimax(board, self.depth - 1, False)
+                    if eval > max_eval:
+                        max_eval = eval
+                        best_move = move
+                    Game().undo()
+            return best_move
+
+        else:
+            best_move = None
+            min_eval = math.inf
+            for move in range(board.width):
+                if board.can_make_move(move):
+                    board.make_move(move, my_piece)
+                    eval = self.minimax(board, self.depth - 1, True)
+                    if eval < min_eval:
+                        min_eval = eval
+                        best_move = move
+                    Game.undo()
+            return best_move
 
 
-print(SmartAgent().player_ahead(B))
-
-
-
-
-
-
+A = [[0, 0, 0, 0, 0, 0],
+     [1, 0, 0, 0, 0, 0],
+     [2, 0, 0, 0, 0, 0],
+     [1, 1, 0, 0, 0, 0],
+     [1, 1, 2, 1, 0, 0],
+     [1, 2, 0, 0, 0, 0],
+     [2, 2, 2, 2, 0, 0]]

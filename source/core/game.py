@@ -39,6 +39,14 @@ class Game:
         self.game_state = GameState.IN_PROGRESS
         self.running = True
 
+    def undo(self):
+        if self.history:
+            last_move = self.history.pop()
+            self.__turn -= 1
+            self.__board.revert(last_move)
+            self.game_state = GameState.IN_PROGRESS
+            self.running = True
+
 
     def tick(self):
         # Performs a single game move for the current agent. Updates game state.
