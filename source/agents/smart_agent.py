@@ -3,9 +3,7 @@ import math
 
 from source.core.agent import Agent
 from source.core.game_state import GameState
-from source.core.game import Game
 
-from source.core.board import Board
 
 
 # https://roboticsproject.readthedocs.io/en/latest/ConnectFourAlgorithm.html
@@ -14,24 +12,24 @@ from source.core.board import Board
 class SmartAgent(Agent):
 
     def __init__(self):
-        self.depth = 1
+        self.depth = 3
 
     def evaluate_window(self, window):
 
         score = 0
-        if window.count(1) == 4 and window.count(0) == 0:
-            score += 100000
-        # elif window.count(1) == 3 and window.count(0) == 1:
-        #     score += 10
-        # elif window.count(1) == 2 and window.count(0) == 2:
-        #     score += 3
-        #
-        if window.count(2) == 4 and window.count(1) == 0:
-            score -= 1000000
-        # elif window.count(2) == 3 and window.count(0) == 1:
-        #     score -= 6
-        # elif window.count(2) == 2 and window.count(0) == 2:
-        #     score -= 2
+
+        if window.count(1) == 4:
+            score += 100
+        elif window.count(2) == 4:
+            score -= 100
+        elif window.count(1) == 3 and window.count(0) == 1:
+            score += 5
+        elif window.count(2) == 3 and window.count(0) == 1:
+            score -= 5
+        elif window.count(1) == 2 and window.count(0) == 2:
+            score += 2
+        elif window.count(2) == 2 and window.count(0) == 2:
+            score -= 2
 
         return score
 
@@ -82,17 +80,18 @@ class SmartAgent(Agent):
             for c in range(len(board[0]) - 3):
                 window = [board[r + 3 - i][c + 3 - i] for i in range(4)]
                 score += self.evaluate_window(window)
-        # print(score)
+
         return score
 
     def minimax(self, board, depth, maximiser):
-        if depth == 0 or  board.get_board_state(4) != GameState.IN_PROGRESS:
-            # print(self.evaluate(board))
-            return self.evaluate(board)
+
+        if depth == 0 or board.get_board_state(4) != GameState.IN_PROGRESS:
+            x = self.evaluate(board)
+            return x
 
         # player 1 (red) wants to max
         if maximiser:
-            max_eval = -100000000
+            max_eval = -math.inf
             for move in range(board.width):
                 if board.can_make_move(move):
                     board.make_move(move, 1)
@@ -102,14 +101,13 @@ class SmartAgent(Agent):
             return max_eval
 
         else:
-            min_eval = 100000000
+            min_eval = math.inf
             for move in range(board.width):
                 if board.can_make_move(move):
                     board.make_move(move, 2)
                     evalu = self.minimax(board, depth - 1, True)
                     min_eval = min(min_eval, evalu)
                     board.revert(move)
-
             return min_eval
 
     def get_move(self, board, my_piece: int):
@@ -139,23 +137,3 @@ class SmartAgent(Agent):
                     board.revert(move)
             return best_move
 
-
-A = [[0, 0, 0, 0, 0, 0],
-     [1, 0, 0, 0, 0, 0],
-     [2, 0, 0, 0, 0, 0],
-     [1, 1, 0, 0, 0, 0],
-     [1, 1, 2, 1, 0, 0],
-     [1, 2, 0, 0, 0, 0],
-     [2, 2, 2, 2, 0, 0]]
-
-if __name__ == '__main__':
-    # Test evaluation
-    agent = SmartAgent()
-    # board = Board()
-    # board.create((7, 6))
-    # board.make_move(0, 1)
-    # board.make_move(0, 1)
-    # board.make_move(0, 1)
-    # board.make_move(0, 1)
-    # board.make_move(1, 2)
-    # print(agent.evaluate(board))
