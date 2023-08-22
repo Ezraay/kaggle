@@ -1,12 +1,34 @@
 import random
 
-from agent_importer import import_agent
 from core.agent import Agent
 from core.board import Board, beautify_board
-from core.colours import GREEN, CLEAR, RED
 from core.game import Game
 from core.game_state import GameState
 
+
+#
+# def simulate_game(agent1, agent2, board: Board, num_to_win=4):
+#     game = Game(agent1, agent2, board, num_to_win)
+#
+#     winner = game.tick_to_completion()
+#     return winner
+#
+#
+# def run_simulations(num_simulations):
+#     agent1 = RandomAgent()
+#     agent2 = ImmediateWinAgent()
+#
+#     with Pool() as pool:
+#         results = pool.starmap(simulate_game, [(agent1, agent2) for _ in range(num_simulations)])
+#
+#     return results.count(GameState.PLAYER1_WON), results.count(GameState.TIE), results.count(GameState.PLAYER2_WON)
+#
+#
+# num_simulations = 1000
+# player1_wins, draws, player2_wins = run_simulations(num_simulations)
+#
+# print(f"Player 1 - RandomAgent\n    {player1_wins} wins, {draws} draws, {player2_wins} losses")
+# print(f"Player 2 - RandomAgent\n    {player2_wins} wins, {draws} draws, {player1_wins} losses")
 
 def simulate_game(agent1_class, agent2_class):
     agent1: Agent = agent1_class()
@@ -51,41 +73,24 @@ def simulate_multiple_agents(agents_classes):
 
     return results
 
-def main():
-    """
-    Main function to initiate and simulate a Connect 4 game between two agents.
-    Configurations and seed for randomness are handled via command line arguments.
 
-    Steps:
-    1. Parse command line arguments.
-    2. Set a random seed if provided.
-    3. Load the agents using dynamic imports.
-    4. Initialize the board and the game.
-    5. Execute the game until completion.
-    6. Display the final game state and results.
-    """
-    # Handle command line arguments to get game configuration
+def main():
     config = create_config()
 
-    # Set the seed for randomness if provided
     if config["seed"] != None:
         random.seed(config["seed"])
-    # random.seed(8)
-    # random.seed(40)
 
-    # Dynamically load the agents' classes based on the file names provided in the config
     agent1_file = config["agent1"]
     agent2_file = config["agent2"]
+    game_count = config["game counts"]
     agent1_class = import_agent(agent1_file)
     agent2_class = import_agent(agent2_file)
-    game_count = config["game counts"]
 
     for i in range(game_count):
         results = simulate_multiple_agents([agent1_class, agent2_class])
 
     for key, value in results.items():
         print(f"{key}: {value} wins", game_count)
-
 
 
 def create_config():

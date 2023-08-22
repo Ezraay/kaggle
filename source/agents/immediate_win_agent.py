@@ -54,10 +54,4 @@ class ImmediateWinAgent(RandomAgent):
             if temp_board.get_board_state(4) in [GameState.PLAYER1_WON, GameState.PLAYER2_WON]:
                 return move
         # If no immediate winning move, select a random move
-        return super().get_move(board,my_piece)
-
-
-
-
-
-
+        return RandomAgent().get_move(board, my_piece)
