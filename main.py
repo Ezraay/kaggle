@@ -1,11 +1,11 @@
 import random
 
-from agent_importer import import_agent
-from core.agent import Agent
-from core.board import Board, beautify_board
-from core.colours import GREEN, CLEAR, RED
-from core.game import Game
-from core.game_state import GameState
+from source.agent_importer import import_agent
+from source.core.agent import Agent
+from source.core.board import Board, beautify_board
+from source.core.colours import GREEN, CLEAR, RED
+from source.core.game import Game
+from source.core.game_state import GameState
 
 
 def main():
