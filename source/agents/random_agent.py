@@ -10,32 +10,7 @@ class RandomAgent(Agent):
         return random.choice(options)
 
 
-    def check_winning_move(self, board, piece):
-        # https://roboticsproject.readthedocs.io/en/latest/ConnectFourAlgorithm.html
-        can_win = True
-        # 1. check for horizontal location for winning move
-        for col in range(len(board) - 3):
-            for row in range(len(board[col])):
-                if board[row][col] == piece and board[row][col+1] == piece and board[row][col+2] == piece and board[row][col+3] == piece:
-                    return can_win
 
-        # 2. check for vertical location for winning move
-        for col in range(len(board)):
-            for row in range(len(board[col])-3):
-                if board[row][col] == piece and board[row+1][col] == piece and board[row+2][col] == piece and board[row+3][col] == piece:
-                    return can_win
-
-        # 3. check positive slope diagonal
-        for col in range(len(board)-3):
-            for row in range(len(board[col])-3):
-                if board[row][col] == piece and board[row+1][col+1] == piece and board[row+2][col+2] == piece and board[row+3][col+3] == piece:
-                    return can_win
-
-        # 4. check negative slope diagonal
-        for col in range(len(board)-3):
-            for row in range(3, len(board[col])):
-                if board[row][col] == piece and board[row-1][col+1] == piece and board[row-2][col+2] == piece and board[row-3][col+3] == piece:
-                    return can_win
 
 
 

@@ -1,7 +1,5 @@
 import random
 import copy
-import sys
-sys.path.append('C:\\Users\\jacky\\Documents\\Uni\\y3s2\\FIT3163\\Project Kaggle\\kaggle\\source')
 from core.board import Board
 from random_agent import RandomAgent
 
