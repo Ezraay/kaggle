@@ -33,6 +33,7 @@ class Nolose(RandomAgent):
         for i in options:
             if i - 3 >= 0:
                 for j in range(3):
+                    pass
                     
 
                               
@@ -41,7 +42,7 @@ class Nolose(RandomAgent):
     
 
     def opp_win(self,board,my_piece):
-        if my_piece = 1:
+        if my_piece == 1:
             opp_piece = 2
         else:
             opp_piece = 1
@@ -50,7 +51,7 @@ class Nolose(RandomAgent):
 
     def look_ahead_1(self,board:Board,my_piece):
         c = copy.deepcopy(board)
-        if my_piece = 1:
+        if my_piece == 1:
             opp_piece = 2
         else:
             opp_piece = 1

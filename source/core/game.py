@@ -2,6 +2,7 @@ from core.agent import Agent
 from core.board import Board
 from core.game_state import GameState
 from core.move import Move
+import time as time
 
 
 class Game:
@@ -49,7 +50,15 @@ class Game:
 
         current_agent = self.__agent1 if self.__turn == 0 else self.__agent2
         my_piece = self.__turn % 2 + 1
+        start = time.time()
         move = current_agent.get_move(self.__board, my_piece)
+        t = time.time() - start
+        if t > 2 and self.__turn != 1:
+            raise TimeoutError("Player " + str(my_piece) + " at Turn " + str(self.__turn) 
+                               + ": This take too long.\n" + str(t) + " seconds. Expect within 2 seconds.")
+        elif self.__turn == 1 and t > 60 :
+            raise TimeoutError(("Player " + str(my_piece) + " fails inital turn limits.\n " + 
+                                str(t) + " seconds. Expect within 60 seconds."))
         if not self.__board.can_make_move(move):
             raise ValueError("Can't place cell at x=" + str(move))
 
