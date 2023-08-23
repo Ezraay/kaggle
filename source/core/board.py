@@ -1,5 +1,5 @@
-from core.colours import GREEN, RED, CLEAR
-from core.game_state import GameState
+from colours import GREEN, RED, CLEAR
+from game_state import GameState
 
 PLAYER_1_PIECE = 1
 PLAYER_2_PIECE = 2
