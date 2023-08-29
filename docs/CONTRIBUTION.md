@@ -4,7 +4,7 @@
 
 First start by cloning the repository either through a desktop app or the commandline
 
-```
+```bash
 git clone https://github.com/Ezraay/kaggle
 ```
 
@@ -15,7 +15,7 @@ code for the project.
 ## Working with branches
 In order to create changes in the repository, you should work in a separate branch to `develop` and `master`. To create a new branch
 use the following command or use GitHub desktop:
-```
+```bash
 git checkout -b feat/your-feature-name
 ```
 
@@ -29,7 +29,7 @@ The branch name should follow the guidelines below:
 `docs/short-docs-description`
 
 To publish your new branch, use the following command:
-```
+```bash
 git push
 ```
 
@@ -45,27 +45,27 @@ It's recommended to create a virtual environment for the project so that depende
 across all development environments. To create a virtual environment, use the following command or create it
 via your IDE.
 
-```
+```bash
 python -m venv ./venv/
 ```
 
 Then you must activate the virtual environment for your shell. This is platform dependent, but for Windows, the command
 is:
 
-```
+```bash
 ./venv/Scripts/activate.bat
 ```
 
 If everything worked correctly, you should see some indication of (venv) in your command line.
 Then you can install the project dependencies to your virtual environment.
 
-```
+```bash
 pip install -r ./requirements.txt
 ```
 
 If these dependencies ever change (i.e. update package version or new package requirement), you can
 update the `requirements.txt` file with the following command:
-```
+```bash
 pip freeze > requirements.txt
 ```
 
@@ -76,15 +76,22 @@ function correctly. The project assumes the root folder is `source/` from the lo
 
 To run the project, use the command line or create launch profiles in your IDE.
 
-```
+```bash
 python ./main.py --help
 ```
 
 The above command will show more information about specific command line arguments you can pass into the
 program. To simulate a game between two agents, use the following command:
 
-```
+```bash
 python ./main.py RandomAgent RandomAgent
+```
+
+## Writing to a database
+The simulation currently has functionality to write to a MongoDB database. The simulation will write a history of the 
+game, the final state, which 2 agents played, and the datetime of simulation.
+```bash
+python ./main.py --write-database "mongodb://localhost:27017" RandomAgent RandomAgent
 ```
 
 ## Where are the agents?
