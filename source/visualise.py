@@ -7,7 +7,7 @@ import pygame
 
 def visualise(board: list[list[int]]):
     """
-    :param board: a 2d array with None, 1 or 2 in each subarray
+    :param board: a 2d array with 0, 1 or 2 in each subarray
     :return: a pygame instance displaying the board. It does not indicate a winning move.
     """
     width = len(board[0])

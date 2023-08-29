@@ -1,7 +1,7 @@
 import random
 
-from source.core.agent import Agent
-from source.core.board import Board
+from core.agent import Agent
+from core.board import Board
 
 
 class RandomAgent(Agent):
