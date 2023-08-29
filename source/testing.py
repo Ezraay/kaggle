@@ -8,7 +8,7 @@ from core.colours import GREEN, CLEAR, RED
 from core.game import Game
 from core.game_state import GameState
 
-def test(agent1, agent2, g_num, verbose=True):
+def test(agent1, agent2, g_num, verbose=False):
     g_res = []
 
     for i in range(g_num):
@@ -41,7 +41,7 @@ def test(agent1, agent2, g_num, verbose=True):
     print(g_res)
     return p1_win, p2_win
 
-r = RandomAgent()
 s = SmartAgent()
+r = RandomAgent()
 
-print(test(r, s, 1))
+print(test(s, r, 10, True))

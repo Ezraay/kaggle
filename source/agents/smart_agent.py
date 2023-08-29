@@ -3,6 +3,8 @@ import math
 
 from core.agent import Agent
 from core.game_state import GameState
+import numpy as np
+from core.board import Board
 
 
 
@@ -12,85 +14,105 @@ from core.game_state import GameState
 class SmartAgent(Agent):
 
     def __init__(self):
-        self.depth = 5
+        self.depth = 3
 
     def evaluate_window(self, window):
-
         score = 0
 
         if window.count(1) == 4:
             return 10000, True
 
+        if window.count(2) == 4:
+            return -10000, True
+
         elif window.count(1) == 3 and window.count(0) == 1:
             score += 5
+
+        elif window.count(2) == 3 and window.count(0) == 1:
+            score -= 5
 
         elif window.count(1) == 2 and window.count(0) == 2:
             score += 2
 
-        if window.count(2) == 3 and window.count(0) == 1:
-            score -= 4
+        elif window.count(2) == 2 and window.count(0) == 2:
+            score -= 2
 
         return score, False
 
     def evaluate(self, board_i):
         board = board_i.to_array()
+        #board = board_i
         score = 0
         c_arr = []
-        for i in range(len(board)):
-            for j in range(len(board[i])):
-                if j == 3:
-                    c_arr.append(board[i][j])
 
-        c_count = c_arr.count(1)
-        score += c_count * 3
+        #
+        # for i in range(len(board)):
+        #     for j in range(len(board[i])):
+        #         if j == 3:
+        #             c_arr.append(board[i][j])
+        #
+        # c_count = c_arr.count(1)
+        # score += c_count * 3
+        #
+        # c_count = c_arr.count(2)
+        # score -= c_count * 3
 
-        c_count = c_arr.count(2)
-        score -= c_count * 3
+        rows = 6
+        cols = 7
 
         # horizontal
-        for r in range(len(board)):
-            r_array = board[r]
-            for c in range(4):
-                window = r_array[c: c + 4]
-                score += self.evaluate_window(window)[0]
-
-
-        # vertical
-        transposed = []
-        for c in range(len(board[0])):
-            col_ar = []
-            for r in range(len(board)):
-                col_ar.append(board[r][c])
-            transposed.append(col_ar)
-
-        for r in range(len(transposed)):
-            r_array = transposed[r]
-            for c in range(4):
-                window = r_array[c: c + 4]
-                score += self.evaluate_window(window)[0]
-                if self.evaluate_window(window)[1]:
+        for i in range(rows):
+            for j in range(cols-3):
+                window = [board[j][i], board[j+1][i], board[j+2][i], board[j+3][i]]
+                res = self.evaluate_window(window)
+                score += res[0]
+                if res[1]:
                     return score
 
-        # pos diag (Up Right)
-        for r in range(len(board) - 3):
-            for c in range(len(board[0]) - 3):
-                window = [board[r + i][c + i] for i in range(4)]
+        # vertical
+        for k in range(cols):
+            for l in range(rows-3):
+                window = [board[k][l], board[k][l+1], board[k][l+2], board[k][l+3]]
                 score += self.evaluate_window(window)[0]
+                res = self.evaluate_window(window)
+                score += res[0]
+                if res[1]:
+                    return score
 
-        # neg diag (Down Left)
-        for r in range(len(board) - 3):
-            for c in range(len(board[0]) - 3):
-                window = [board[r + 3 - i][c + 3 - i] for i in range(4)]
+        # diagonal up
+        for m in range(cols - 3):
+            for n in range(rows - 3):
+                window = [board[m][n], board[m+1][n+1], board[m+2][n+2], board[m+3][n+3]]
                 score += self.evaluate_window(window)[0]
+                res = self.evaluate_window(window)
+                score += res[0]
+                if res[1]:
+                    return score
+
+        # diagonal down
+        for o in range(cols - 4):
+            for p in range(rows-3, rows+1):
+                window = [board[p][o], board[p-1][o+1], board[p-2][o+2], board[p-3][o+3]]
+                score += self.evaluate_window(window)[0]
+                res = self.evaluate_window(window)
+                score += res[0]
+                if res[1]:
+                    return score
 
         return score
 
     def minimax(self, board, depth, maximiser):
 
-        if depth == 0 or board.get_board_state(4) != GameState.IN_PROGRESS:
+        outcome = board.get_board_state(4)
 
+        if depth == 0 or outcome != GameState.IN_PROGRESS:
+            if outcome == GameState.PLAYER1_WON:
+                return 10000000
+            elif outcome == GameState.PLAYER2_WON:
+                return -10000000
+            else:
+                return self.evaluate(board)
 
-        # player 1 (red) wants to max
         if maximiser:
             max_eval = -math.inf
             for move in range(board.width):
@@ -101,7 +123,6 @@ class SmartAgent(Agent):
                     board.revert(move)
             return max_eval
 
-        # player 2 wants min
         else:
             min_eval = math.inf
             for move in range(board.width):
@@ -115,7 +136,7 @@ class SmartAgent(Agent):
     def get_move(self, board, my_piece: int):
         if my_piece == 1:
             best_move = None
-            max_eval = -100000000
+            max_eval = -math.inf
             for move in range(board.width):
                 if board.can_make_move(move):
                     board.make_move(move, my_piece)
@@ -126,16 +147,4 @@ class SmartAgent(Agent):
                     board.revert(move)
             return best_move
 
-        else:
-            best_move = None
-            min_eval = 100000000
-            for move in range(board.width):
-                if board.can_make_move(move):
-                    board.make_move(move, my_piece)
-                    evalu = self.minimax(board, self.depth - 1, True)
-                    if evalu < min_eval:
-                        min_eval = evalu
-                        best_move = move
-                    board.revert(move)
-            return best_move
 
