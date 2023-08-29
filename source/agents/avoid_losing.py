@@ -132,6 +132,7 @@ b.create((7,6))
 # m = [3,3,4,2,4,4,5,6,3,3,5,5,4]
 # No good moves
 m = [3,3,2,4,3]
+
 p = 2
 for i in m:
     if p == 1:
@@ -144,4 +145,4 @@ print(b)
 print(b.get_board_state(4))
 a = Avoid_Losing()
 res = a.get_move(b,2)
-print(res)  
+print(res)

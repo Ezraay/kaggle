@@ -1,4 +1,5 @@
 import random
+from datetime import datetime
 
 from agent_importer import import_agent
 from core.agent import Agent
@@ -6,6 +7,7 @@ from core.board import Board, beautify_board
 from core.colours import GREEN, CLEAR, RED
 from core.game import Game
 from core.game_state import GameState
+from source.database.mongo_database import MongoDatabase
 
 
 def main():
@@ -20,6 +22,7 @@ def main():
     4. Initialize the board and the game.
     5. Execute the game until completion.
     6. Display the final game state and results.
+    7. Optionally write game to database
     """
     # Handle command line arguments to get game configuration
     config = create_config()
@@ -62,6 +65,12 @@ def main():
         print(f"{CLEAR}Game ended in a tie")
     print(CLEAR)
 
+    if config["write_database"] is not None:
+        connection_string: str = config["write_database"]
+        database = MongoDatabase()
+        database.connect(connection_string)
+        database.write_game(game.history, game.game_state, agent1, agent2, datetime.now())
+
 
 def create_config():
     """
@@ -84,6 +93,7 @@ def create_config():
     parser.add_argument("agent1", help="Path to first player's agent")
     parser.add_argument("agent2", help="Path to second player's agent")
     parser.add_argument("--seed", help="Seed for random module", required=False, type=int)
+    parser.add_argument("--write-database", help="Database to write results to", required=False, type=str)
     args = parser.parse_args()
     config = vars(args)
     return config
