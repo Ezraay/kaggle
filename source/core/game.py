@@ -53,10 +53,10 @@ class Game:
         start = time.time()
         move = current_agent.get_move(self.__board, my_piece)
         t = time.time() - start
-        if t > 2 and self.__turn != 0:
+        if t > 2 and self.__turn -1 > 0:
             raise TimeoutError("Player " + str(my_piece) + " at Turn " + str(self.__turn) 
                                + ": This take too long.\n" + str(t) + " seconds. Expect within 2 seconds.")
-        elif self.__turn == 0 and t > 60 :
+        elif self.__turn -1 <= 0 and t > 60 :
             raise TimeoutError(("Player " + str(my_piece) + " fails inital turn limits.\n " + 
                                 str(t) + " seconds. Expect within 60 seconds."))
         if not self.__board.can_make_move(move):
