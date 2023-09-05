@@ -34,8 +34,8 @@ def simulate_game(agent1_class, agent2_class):
 
 
 def simulate_multiple_agents(agents_classes):
-    results = {}
 
+    results = {}
     for agent1_class in agents_classes:
         for agent2_class in agents_classes:
             if agent1_class != agent2_class:  # Ensure the agent doesn't play against itself
@@ -43,12 +43,10 @@ def simulate_multiple_agents(agents_classes):
 
                 print(f"Winner: {winner}")
 
-                # Store the results
                 if winner not in results:
                     results[winner] = 1
                 else:
                     results[winner] += 1
-
     return results
 
 def main():
@@ -78,14 +76,17 @@ def main():
     agent2_file = config["agent2"]
     agent1_class = import_agent(agent1_file)
     agent2_class = import_agent(agent2_file)
-    game_count = config["game counts"]
+    game_count = config["count"]
+
+    all_results = {"Player 1 Won": 0, "Player 2 Won": 0, "Tie": 0, "Unknown State": 0}
 
     for i in range(game_count):
         results = simulate_multiple_agents([agent1_class, agent2_class])
+        for key, value in results.items():
+            all_results[key] += value
 
-    for key, value in results.items():
-        print(f"{key}: {value} wins", game_count)
-
+    for key, value in all_results.items():
+        print(f"{key}: {value} wins out of {game_count} games")
 
 
 def create_config():
@@ -110,7 +111,7 @@ def create_config():
     parser.add_argument("agent2", help="Path to second player's agent")
     parser.add_argument("--seed", help="Seed for random module", required=False, type=int)
     parser.add_argument("--write-database", help="Database to write results to", required=False, type=str)
-    parser.add_argument("game counts", help="number of games to play", type=int)
+    parser.add_argument("--count", help="number of games to play", type=int)
     args = parser.parse_args()
     config = vars(args)
     return config
