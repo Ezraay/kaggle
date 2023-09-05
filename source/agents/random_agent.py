@@ -1,4 +1,5 @@
 import random
+
 from source.core.agent import Agent
 from source.core.board import Board
 
@@ -8,15 +9,4 @@ class RandomAgent(Agent):
         # generate a list possible from the class Board and return a random move
         options = [x for x in list(range(board.width)) if board.can_make_move(x)]
         return random.choice(options)
-
-
-
-
-
-
-
-
-
-
-
-
+    
