@@ -1,7 +1,7 @@
 import importlib
 import re
 
-from core.agent import Agent
+from source.core.agent import Agent
 
 
 def __to_snake_case(pascal_case: str) -> str:
@@ -41,7 +41,7 @@ def import_agent(class_name: str) -> type:
         AssertionError:
             If the imported class is not a subclass of the Agent base class.
     """
-    base_path = "agents"
+    base_path = "source.agents"
     file_name = __to_snake_case(class_name)
     module_path = f"{base_path}.{file_name}"
 

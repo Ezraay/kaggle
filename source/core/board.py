@@ -1,7 +1,7 @@
 import sys
 sys.path.append('C:\\Users\\jacky\\Documents\\Uni\\y3s2\\FIT3163\\Project Kaggle\\kaggle\\source')
-from core.colours import GREEN, RED, CLEAR
-from core.game_state import GameState
+from source.core.colours import GREEN, RED, CLEAR
+from source.core.game_state import GameState
 
 PLAYER_1_PIECE = 1
 PLAYER_2_PIECE = 2
@@ -23,6 +23,9 @@ class Board:
     @property
     def height(self):
         return self.__size[1]
+
+    def get_piece_at(self, x: int, y: int):
+        return self.__board[x][y]
     
     def can_make_move(self, x: int):
         # check if you can make a move in that column

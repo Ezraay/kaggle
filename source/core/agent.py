@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from core.board import Board
+from source.core.board import Board
 
 # abstract class for the agent to build on
 class Agent(ABC):
