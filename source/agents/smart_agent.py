@@ -1,10 +1,9 @@
 import random
 import math
 
-from core.agent import Agent
-from core.game_state import GameState
-import numpy as np
-from core.board import Board
+from source.core.agent import Agent
+from source.core.game_state import GameState
+from source.core.board import Board
 
 
 
@@ -108,7 +107,7 @@ class SmartAgent(Agent):
                     board.make_move(move, 1)
                     evalu = self.minimax(board, depth - 1, False)
                     max_eval = max(max_eval, evalu)
-                    board.revert(move)
+                    board.unmake_move()
             return max_eval
 
         else:
@@ -118,7 +117,7 @@ class SmartAgent(Agent):
                     board.make_move(move, 2)
                     evalu = self.minimax(board, depth - 1, True)
                     min_eval = min(min_eval, evalu)
-                    board.revert(move)
+                    board.unmake_move()
             return min_eval
 
     def get_move(self, board, my_piece: int):
@@ -132,7 +131,7 @@ class SmartAgent(Agent):
                     if evalu > max_eval:
                         max_eval = evalu
                         best_move = move
-                    board.revert(move)
+                    board.unmake_move()
             return best_move
 
 
