@@ -78,7 +78,7 @@ def main():
     agent2_file = config["agent2"]
     agent1_class = import_agent(agent1_file)
     agent2_class = import_agent(agent2_file)
-    game_count = config["game counts"]
+    game_count = config["game_counts"]
 
     for i in range(game_count):
         results = simulate_multiple_agents([agent1_class, agent2_class])
@@ -110,7 +110,7 @@ def create_config():
     parser.add_argument("agent2", help="Path to second player's agent")
     parser.add_argument("--seed", help="Seed for random module", required=False, type=int)
     parser.add_argument("--write-database", help="Database to write results to", required=False, type=str)
-    parser.add_argument("game counts", help="number of games to play", type=int)
+    parser.add_argument("--count", help="number of games to play", type=int)
     args = parser.parse_args()
     config = vars(args)
     return config
