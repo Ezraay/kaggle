@@ -1,8 +1,7 @@
 import sys
 sys.path.append('C:\\Users\\jacky\\Documents\\Uni\\y3s2\\FIT3163\\Project Kaggle\\kaggle\\source')
-from core.colours import GREEN, RED, CLEAR
-from core.game_state import GameState
-from core.move import Move
+from source.core.colours import GREEN, RED, CLEAR
+from source.core.game_state import GameState
 
 PLAYER_1_PIECE = 1
 PLAYER_2_PIECE = 2
@@ -10,7 +9,6 @@ EMPTY_PIECE = 0
 
 
 class Board:
-
     def create(self, size: tuple[int, int]):
         self.__heights = [0 for _ in range(size[0])]
         self.__board = [[EMPTY_PIECE for _ in range(size[1])] for _ in range(size[0])]
@@ -25,6 +23,9 @@ class Board:
     @property
     def height(self):
         return self.__size[1]
+
+    def get_piece_at(self, x: int, y: int):
+        return self.__board[x][y]
     
     def can_make_move(self, x: int):
         # check if you can make a move in that column
@@ -42,11 +43,6 @@ class Board:
         self.__board[x][self.get_height_at(x)] = piece
         self.history.append(x)
         self.__heights[x] += 1
-
-    def revert(self, move: int):
-        self.__heights[move] -= 1
-        self.__board[move][self.get_height_at(move)] = EMPTY_PIECE
-
 
     def get_board_state(self, in_a_row: int) -> GameState:
         
