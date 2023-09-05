@@ -43,7 +43,6 @@ class Avoid_Losing(RandomAgent):
 
             # Diagonal Win
             streak = 0
-            board.make_move(i,my_piece)
             # Diagonal positive
             piece = my_piece
             # count streak go up right
@@ -66,7 +65,6 @@ class Avoid_Losing(RandomAgent):
                 b -=1
             # return win move
             if streak >= 3:
-                board.unmake_move()
                 return i
             # diagonal negative
             streak = 0
@@ -91,7 +89,6 @@ class Avoid_Losing(RandomAgent):
                 a +=1 
                 b -=1
             if streak >= 3:
-                board.unmake_move()
                 return i
             bo[i][x] = 0
         return None
@@ -115,7 +112,7 @@ class Avoid_Losing(RandomAgent):
         for i in range(len(options)):
             ###
             p = options[i]
-            board.make_move(p)
+            board.make_move(p,my_piece)
             if self.immediate_win(c,opp_piece) != None:
                 no_move.append = options[i]
             ####
@@ -126,11 +123,16 @@ class Avoid_Losing(RandomAgent):
 
 b =  Board()
 b.create((7,6))
-# m = [3,3,3,2,3,3,4,2,5,6,4,4,4,5,5]
-# m = [3,3,2,3,4,3]
-# m = [3,4,2,2,1,0,1,2,1,1,2,5]
-# m = [4,4,3,5,2,1,4,2,3,3,4,3,4,4,3,1,5,6,5]
-m = [4,3,5,6,4,4,5,5,3,6,6]
+# Vertical win for 2 and Horizontal for 1
+# m = [2,2,1,2,1,2,3]
+# Diagonal 
+# negative win for 2 but in 1's turn
+# m = [3,3,4,2,4,4,5,6,3,3]
+# positive win for 2 in 2's turn
+# m = [3,3,4,2,4,4,5,6,3,3,5,5,4]
+# No good moves
+m = [3,3,2,4,3]
+
 p = 2
 for i in m:
     if p == 1:
@@ -143,11 +145,4 @@ print(b)
 print(b.get_board_state(4))
 a = Avoid_Losing()
 res = a.get_move(b,2)
-print(res)  
-
-
-
-
-        
-
-        
+print(res)

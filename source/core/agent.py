@@ -7,3 +7,6 @@ class Agent(ABC):
     @abstractmethod
     def get_move(self, board: Board, my_piece: int) -> int:
         pass
+
+    def get_name(self):
+        return type(self).__name__
