@@ -122,6 +122,9 @@ def visualise(board: Board, agent: Agent = None):
     def calculate_evaluations(board: Board, current_turn: int):
         result = []
         for i in range(board.width):
+            if not board.can_make_move(i):
+                result.append(None)
+                continue
             board.make_move(i, current_turn)
             result.append(evaluate(board))
             board.unmake_move()
