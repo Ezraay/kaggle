@@ -44,4 +44,4 @@ def test(agent1, agent2, g_num, verbose=False):
 s = SmartAgent()
 r = RandomAgent()
 
-print(test(s, r, 10, True))
+print(test(s, r, 1, True))

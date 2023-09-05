@@ -22,20 +22,11 @@ class SmartAgent(Agent):
         if window.count(1) == 4:
             return 10000, True
 
-        if window.count(2) == 4:
-            return -10000, True
-
         elif window.count(1) == 3 and window.count(0) == 1:
             score += 5
 
-        elif window.count(2) == 3 and window.count(0) == 1:
-            score -= 5
-
         elif window.count(1) == 2 and window.count(0) == 2:
             score += 2
-
-        elif window.count(2) == 2 and window.count(0) == 2:
-            score -= 2
 
         return score, False
 
@@ -73,7 +64,6 @@ class SmartAgent(Agent):
         for k in range(cols):
             for l in range(rows-3):
                 window = [board[k][l], board[k][l+1], board[k][l+2], board[k][l+3]]
-                score += self.evaluate_window(window)[0]
                 res = self.evaluate_window(window)
                 score += res[0]
                 if res[1]:
@@ -83,7 +73,6 @@ class SmartAgent(Agent):
         for m in range(cols - 3):
             for n in range(rows - 3):
                 window = [board[m][n], board[m+1][n+1], board[m+2][n+2], board[m+3][n+3]]
-                score += self.evaluate_window(window)[0]
                 res = self.evaluate_window(window)
                 score += res[0]
                 if res[1]:
@@ -93,7 +82,6 @@ class SmartAgent(Agent):
         for o in range(cols - 4):
             for p in range(rows-3, rows+1):
                 window = [board[p][o], board[p-1][o+1], board[p-2][o+2], board[p-3][o+3]]
-                score += self.evaluate_window(window)[0]
                 res = self.evaluate_window(window)
                 score += res[0]
                 if res[1]:
