@@ -1,7 +1,7 @@
 import random
 
-from core.agent import Agent
-from core.board import Board
+from source.core.agent import Agent
+from source.core.board import Board
 
 class RandomAgent(Agent):
     def get_move(self, board: Board, my_piece: int) -> int:

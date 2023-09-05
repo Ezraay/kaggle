@@ -1,7 +1,7 @@
 import random
 
-from core.agent import Agent
-from core.board import Board
+from source.core.agent import Agent
+from source.core.board import Board
 
 # https://roboticsproject.readthedocs.io/en/latest/ConnectFourAlgorithm.html
 
