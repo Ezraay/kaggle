@@ -1,7 +1,7 @@
 import copy
 import random
-from core.board import Board, PLAYER_1_PIECE,PLAYER_2_PIECE
-from core.game_state import GameState
+from source.core.board import Board, PLAYER_1_PIECE,PLAYER_2_PIECE
+from source.core.game_state import GameState
 from random_agent import RandomAgent
 
 def check_winning_move(self, board: Board, piece):

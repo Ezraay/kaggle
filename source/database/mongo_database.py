@@ -2,10 +2,10 @@ import datetime as datetime
 from pymongo import MongoClient
 from pymongo.database import Database
 
-from ..core.agent import Agent
-from ..core.game_state import GameState
-from ..core.move import Move
-from .move_encoder import encode_moves
+from source.core.agent import Agent
+from source.core.game_state import GameState
+from source.core.move import Move
+from source.database.move_encoder import encode_moves
 
 
 class MongoDatabase:

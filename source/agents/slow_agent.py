@@ -1,6 +1,6 @@
 import random
-from agents.random_agent import RandomAgent
-from core.board import Board
+from source.agents.random_agent import RandomAgent
+from source.core.board import Board
 import time as time
 
 # This is to test if a move takes too long. Same as Random

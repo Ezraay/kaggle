@@ -1,7 +1,7 @@
-from core.agent import Agent
-from core.board import Board
-from core.game_state import GameState
-from core.move import Move
+from source.core.agent import Agent
+from source.core.board import Board
+from source.core.game_state import GameState
+from source.core.move import Move
 import time as time
 
 
@@ -39,6 +39,14 @@ class Game:
 
         self.game_state = GameState.IN_PROGRESS
         self.running = True
+
+    def undo(self):
+        if self.history:
+            last_move = self.history.pop()
+            self.__turn -= 1
+            self.__board.revert(last_move)
+            self.game_state = GameState.IN_PROGRESS
+            self.running = True
 
 
     def tick(self):
