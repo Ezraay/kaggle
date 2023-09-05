@@ -2,11 +2,11 @@ import random
 
 from agents.random_agent import RandomAgent
 from agents.smart_agent import SmartAgent
-from core.agent import Agent
-from core.board import Board, beautify_board
-from core.colours import GREEN, CLEAR, RED
-from core.game import Game
-from core.game_state import GameState
+from source.core.agent import Agent
+from source.core.board import Board, beautify_board
+from source.core.colours import GREEN, CLEAR, RED
+from source.core.game import Game
+from source.core.game_state import GameState
 
 def test(agent1, agent2, g_num, verbose=False):
     g_res = []
@@ -44,4 +44,4 @@ def test(agent1, agent2, g_num, verbose=False):
 s = SmartAgent()
 r = RandomAgent()
 
-print(test(s, r, 1, True))
+print(test(s, r, 10, True))
