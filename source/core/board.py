@@ -164,6 +164,15 @@ def beautify_board(board: Board) -> str:
     board_values += CLEAR
     return board_values
 
+def copy(self):
+    """Create a deep copy of the current board."""
+    new_board = Board()
+    new_board.__heights = self.__heights.copy()
+    new_board.__board = [row.copy() for row in self.__board]
+    new_board.__size = self.__size
+    new_board.history = self.history.copy()
+    return new_board
+
 b = Board()
 b.create((7,6))
 m = [3,2,3,3,4,5,2,4,2]
