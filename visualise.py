@@ -161,10 +161,15 @@ def visualise(board: Board, agent: Agent = None):
                 # current_turn = PLAYER_1_PIECE if current_turn == PLAYER_2_PIECE else PLAYER_2_PIECE
             if event.type == pygame.KEYDOWN:
                 if event.key == K_z:
+                    # undo once for the player
                     if not len(board.history) == 0:
                         board.unmake_move()
                         current_turn = PLAYER_1_PIECE if current_turn == PLAYER_2_PIECE else PLAYER_2_PIECE
-                        evaluations = calculate_evaluations(board, current_turn)
+                    # if playing against an agent, undo once more for the agent
+                    if agent is not None and not len(board.history) == 0:
+                        board.unmake_move()
+                        current_turn = PLAYER_1_PIECE if current_turn == PLAYER_2_PIECE else PLAYER_2_PIECE
+                    evaluations = calculate_evaluations(board, current_turn)
 
         screen.fill((0, 0, 255))
         for col in range(width):
