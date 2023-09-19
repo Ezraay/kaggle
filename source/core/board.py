@@ -1,4 +1,7 @@
 import sys
+
+import source.core.board
+
 sys.path.append('C:\\Users\\jacky\\Documents\\Uni\\y3s2\\FIT3163\\Project Kaggle\\kaggle\\source')
 from source.core.colours import GREEN, RED, CLEAR
 from source.core.game_state import GameState
@@ -163,6 +166,15 @@ class Board:
         new_board.history = self.history.copy()
         return new_board
 
+    def equals(self, other):
+        if other.__heights != self.__heights:
+            return False
+        for i in range(self.width):
+            if other.__board[i] != self.__board[i]:
+                return False
+        return True
+
+
 
 def beautify_board(board: Board) -> str:
     board_values = str(board)
@@ -189,4 +201,5 @@ if __name__ == "__main__":
     print(b.history)
 
     b2 = b.copy()
-    print()
+    b2.make_move(0, 1)
+    print(b2.equals(b))
