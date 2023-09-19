@@ -173,16 +173,19 @@ def copy(self):
     new_board.history = self.history.copy()
     return new_board
 
-b = Board()
-b.create((7,6))
-m = [3,2,3,3,4,5,2,4,2]
-p = 2
-for i in m:
-    if p == 1:
-        p = 2
-    else:
-        p = 1
-    b.make_move(i,p)
-print(b.history)
-b.unmake_move()
-print(b.history)
+if __name__ == "__main__":
+    b = Board()
+    b.create((7,6))
+    m = [3,2,3,3,4,5,2,4,2]
+    p = 2
+    for i in m:
+        if p == 1:
+            p = 2
+        else:
+            p = 1
+        b.make_move(i,p)
+    print(b.history)
+    b.unmake_move()
+    print(b.history)
+
+    b2 = copy(b)
