@@ -154,7 +154,15 @@ class Board:
                 result += "[" + str(self.__board[x][y]) + "]"
             result += "\n"
         return result
-    
+    def copy(self):
+        """Create a deep copy of the current board."""
+        new_board = Board()
+        new_board.__heights = self.__heights.copy()
+        new_board.__board = [row.copy() for row in self.__board]
+        new_board.__size = self.__size
+        new_board.history = self.history.copy()
+        return new_board
+
 
 def beautify_board(board: Board) -> str:
     board_values = str(board)
@@ -164,14 +172,6 @@ def beautify_board(board: Board) -> str:
     board_values += CLEAR
     return board_values
 
-def copy(self):
-    """Create a deep copy of the current board."""
-    new_board = Board()
-    new_board.__heights = self.__heights.copy()
-    new_board.__board = [row.copy() for row in self.__board]
-    new_board.__size = self.__size
-    new_board.history = self.history.copy()
-    return new_board
 
 if __name__ == "__main__":
     b = Board()
@@ -188,4 +188,5 @@ if __name__ == "__main__":
     b.unmake_move()
     print(b.history)
 
-    b2 = copy(b)
+    b2 = b.copy()
+    print()
