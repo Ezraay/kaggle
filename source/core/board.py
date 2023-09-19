@@ -1,4 +1,7 @@
 import sys
+
+import source.core.board
+
 sys.path.append('C:\\Users\\jacky\\Documents\\Uni\\y3s2\\FIT3163\\Project Kaggle\\kaggle\\source')
 from source.core.colours import GREEN, RED, CLEAR
 from source.core.game_state import GameState
@@ -154,7 +157,24 @@ class Board:
                 result += "[" + str(self.__board[x][y]) + "]"
             result += "\n"
         return result
-    
+    def copy(self):
+        """Create a deep copy of the current board."""
+        new_board = Board()
+        new_board.__heights = self.__heights.copy()
+        new_board.__board = [row.copy() for row in self.__board]
+        new_board.__size = self.__size
+        new_board.history = self.history.copy()
+        return new_board
+
+    def equals(self, other):
+        if other.__heights != self.__heights:
+            return False
+        for i in range(self.width):
+            if other.__board[i] != self.__board[i]:
+                return False
+        return True
+
+
 
 def beautify_board(board: Board) -> str:
     board_values = str(board)
@@ -164,16 +184,22 @@ def beautify_board(board: Board) -> str:
     board_values += CLEAR
     return board_values
 
-b = Board()
-b.create((7,6))
-m = [3,2,3,3,4,5,2,4,2]
-p = 2
-for i in m:
-    if p == 1:
-        p = 2
-    else:
-        p = 1
-    b.make_move(i,p)
-print(b.history)
-b.unmake_move()
-print(b.history)
+
+if __name__ == "__main__":
+    b = Board()
+    b.create((7,6))
+    m = [3,2,3,3,4,5,2,4,2]
+    p = 2
+    for i in m:
+        if p == 1:
+            p = 2
+        else:
+            p = 1
+        b.make_move(i,p)
+    print(b.history)
+    b.unmake_move()
+    print(b.history)
+
+    b2 = b.copy()
+    b2.make_move(0, 1)
+    print(b2.equals(b))

@@ -33,6 +33,7 @@ class Game:
         self.__agent1 = agent1
         self.__agent2 = agent2
         self.__board = board
+        self.__board_copy = board.copy()
         self.__turn = 0
         self.__in_a_row = in_a_row
         self.history: list[Move] = []
@@ -44,7 +45,7 @@ class Game:
         if self.history:
             last_move = self.history.pop()
             self.__turn -= 1
-            self.__board.revert(last_move)
+            self.__board.unmake_move()
             self.game_state = GameState.IN_PROGRESS
             self.running = True
 
@@ -59,7 +60,9 @@ class Game:
         current_agent = self.__agent1 if self.__turn == 0 else self.__agent2
         my_piece = self.__turn % 2 + 1
         start = time.time()
-        move = current_agent.get_move(self.__board, my_piece)
+        move = current_agent.get_move(self.__board_copy, my_piece)
+        if not self.__board_copy.equals(self.__board):
+            raise Exception("Board copy not returned to original state, check do/undo's")
         t = time.time() - start
         if t > 2 and self.__turn -1 > 0:
             raise TimeoutError("Player " + str(my_piece) + " at Turn " + str(self.__turn) 
@@ -73,6 +76,7 @@ class Game:
         move_data = Move(move, self.__board.get_height_at(move), my_piece)
         self.history.append(move_data)
         self.__board.make_move(move, my_piece)
+        self.__board_copy.make_move(move, my_piece)
         self.__turn += 1
         if self.__is_game_over():
             self.running = False
