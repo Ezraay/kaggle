@@ -41,14 +41,6 @@ class Game:
         self.game_state = GameState.IN_PROGRESS
         self.running = True
 
-    def undo(self):
-        if self.history:
-            last_move = self.history.pop()
-            self.__turn -= 1
-            self.__board.unmake_move()
-            self.game_state = GameState.IN_PROGRESS
-            self.running = True
-
 
     def tick(self):
         # Performs a single game move for the current agent. Updates game state.
@@ -57,7 +49,7 @@ class Game:
         Checks for game over after the move.
         '''
 
-        current_agent = self.__agent1 if self.__turn == 0 else self.__agent2
+        current_agent = self.__agent1 if self.__turn % 2 == 0 else self.__agent2
         my_piece = self.__turn % 2 + 1
         start = time.time()
         move = current_agent.get_move(self.__board_copy, my_piece)

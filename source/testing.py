@@ -20,13 +20,11 @@ def test(agent1, agent2, g_num, verbose=False):
         game.tick_to_completion()
 
         # Display the results, board state, and move history
-
         if verbose:
             print(beautify_board(board))
-            print("\nBoard State:")
-            print(board.to_array())
             print("\nHistory:")
-            print(game.history)
+            print(board.history)
+            print("------------------------------")
 
         if game.game_state == GameState.PLAYER1_WON:
             g_res.append(1)

@@ -8,40 +8,43 @@ def evaluate_window(window: list[int]):
     # check for 4 in a row
     if window.count(1) == 4:
         score += 1000000
-        return score
 
     if window.count(2) == 4:
         score -= 1000000
-        return score
 
     return score
 
 def evaluate(board: Board):
     score = 0
+    i = 0
 
     # horizontal
     for y in range(board.height):
         for x in range(board.width - 3):
             window = board.get_window(x, y, 1, 0, 4)
             score += evaluate_window(window)
+            i += 1
 
     # vertical
     for y in range(board.height - 3):
         for x in range(board.width):
             window = board.get_window(x, y, 0, 1, 4)
             score += evaluate_window(window)
+            i += 1
 
     # bottom-left to upper-right
     for y in range(board.height - 3):
         for x in range(board.width - 3):
             window = board.get_window(x, y, 1, 1, 4)
             score += evaluate_window(window)
+            i += 1
 
     # upper-left to bottom-right
     for y in range(board.height - 3, board.height):
         for x in range(board.width - 3):
             window = board.get_window(x, y, 1, -1, 4)
             score += evaluate_window(window)
+            i += 1
 
     return score
 
