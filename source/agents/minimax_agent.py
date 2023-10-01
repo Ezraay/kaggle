@@ -1,4 +1,5 @@
 import math
+import random
 
 from source.core.agent import Agent
 from source.core.board import Board
@@ -9,8 +10,8 @@ class MinimaxAgent(Agent):
 
     def get_move(self, board: Board, my_piece: int) -> int:
         options = [x for x in list(range(board.width)) if board.can_make_move(x)]
+        random.shuffle(options)
         max_eval = -999999999
-        best_move = options[0]
 
         for move in options:
             min_eval = math.inf
