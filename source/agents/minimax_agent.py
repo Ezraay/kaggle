@@ -1,12 +1,52 @@
 import math
 import random
+from abc import abstractmethod
 
 from source.core.agent import Agent
 from source.core.board import Board
-from source.core.evaluation import evaluate
 from source.core.game_state import GameState
 
 class MinimaxAgent(Agent):
+    def __init__(self, depth):
+        self.depth = depth
+
+    @abstractmethod
+    def evaluate_window(self, window: list[int], in_a_row: int):
+        pass
+
+    def evaluate(self, board: Board, in_a_row: int):
+        score = 0
+        i = 0
+
+        # horizontal
+        for y in range(board.height):
+            for x in range(board.width - in_a_row + 1):
+                window = board.get_window(x, y, 1, 0, in_a_row)
+                score += self.evaluate_window(window, in_a_row)
+                i += 1
+
+        # vertical
+        for y in range(board.height - in_a_row + 1):
+            for x in range(board.width):
+                window = board.get_window(x, y, 0, 1, in_a_row)
+                score += self.evaluate_window(window, in_a_row)
+                i += 1
+
+        # bottom-left to upper-right
+        for y in range(board.height - in_a_row + 1):
+            for x in range(board.width - in_a_row + 1):
+                window = board.get_window(x, y, 1, 1, in_a_row)
+                score += self.evaluate_window(window, in_a_row)
+                i += 1
+
+        # upper-left to bottom-right
+        for y in range(in_a_row - 1, board.height):
+            for x in range(board.width - in_a_row + 1):
+                window = board.get_window(x, y, 1, -1, in_a_row)
+                score += self.evaluate_window(window, in_a_row)
+                i += 1
+
+        return score
 
     def get_move(self, board: Board, my_piece: int, in_a_row: int) -> int:
 
@@ -27,7 +67,7 @@ class MinimaxAgent(Agent):
 
         for move in options:
             board.make_move(move, my_piece)
-            eval_i = evaluate(board, in_a_row)
+            eval_i = self.evaluate(board, in_a_row)
             if board.get_board_state(in_a_row) != GameState.IN_PROGRESS:
                 board.unmake_move()
                 return move
@@ -36,7 +76,7 @@ class MinimaxAgent(Agent):
 
             for opp_move in opponent_options:
                 board.make_move(opp_move, opp_piece)
-                eval_o = evaluate(board, in_a_row)
+                eval_o = self.evaluate(board, in_a_row)
                 board.unmake_move()
                 if maximise:
                     eval_i = min(eval_i, eval_o)

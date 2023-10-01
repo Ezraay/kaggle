@@ -2,6 +2,8 @@ import random
 
 from agents.random_agent import RandomAgent
 from agents.minimax_agent import MinimaxAgent
+from source.agents.basic_minimax_agent import BasicMinimaxAgent
+from source.agents.smart_minimax_agent import SmartMinimaxAgent
 from source.core.agent import Agent
 from source.core.board import Board, beautify_board
 from source.core.colours import GREEN, CLEAR, RED
@@ -39,7 +41,8 @@ def test(agent1, agent2, g_num, verbose=False):
     print(g_res)
     return p1_win, p2_win
 
-m = MinimaxAgent()
-r = RandomAgent()
+m = SmartMinimaxAgent()
 
-print(test(m, m, 25, False))
+r = BasicMinimaxAgent()
+
+print(test(m, r, 10, True))
