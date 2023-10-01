@@ -6,6 +6,8 @@ from source.agent_importer import import_agent
 from source.core.agent import Agent
 from source.core.board import Board, PLAYER_1_PIECE, PLAYER_2_PIECE
 from source.core.game_state import GameState
+from source.core.evaluation import evaluate
+
 
 
 # test_board = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0],
@@ -35,7 +37,7 @@ def evaluate_window(window):
 
     return score, False
 
-def evaluate(board_i):
+def evaluate_old(board_i):
     board = board_i.to_array()
     # board = board_i
     score = 0
@@ -52,7 +54,7 @@ def evaluate(board_i):
     # c_count = c_arr.count(2)
     # score -= c_count * 3
 
-    rows = 6
+    rows = 6 # height
     cols = 7
 
     # horizontal
@@ -103,7 +105,7 @@ def minimax(board, depth, maximiser):
         elif outcome == GameState.PLAYER2_WON:
             return -10000000
         else:
-            return evaluate(board)
+            return evaluate_old(board)
 
     if maximiser:
         max_eval = -math.inf

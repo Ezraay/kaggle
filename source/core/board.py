@@ -157,6 +157,7 @@ class Board:
                 result += "[" + str(self.__board[x][y]) + "]"
             result += "\n"
         return result
+
     def copy(self):
         """Create a deep copy of the current board."""
         new_board = Board()
@@ -185,6 +186,7 @@ class Board:
                 raise Exception(f"y-value out of bounds\nGot: {pos_y}\nExpected: [0-{self.height - 1}]")
             result.append(self.get_piece_at(pos_x, pos_y))
         return result
+
 
 
 def beautify_board(board: Board) -> str:
