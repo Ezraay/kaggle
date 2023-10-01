@@ -8,7 +8,7 @@ from source.core.game_state import GameState
 
 class MinimaxAgent(Agent):
 
-    def get_move(self, board: Board, my_piece: int) -> int:
+    def get_move(self, board: Board, my_piece: int, in_a_row: int) -> int:
 
         if my_piece == 1:
             opp_piece = 2
