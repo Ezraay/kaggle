@@ -5,7 +5,7 @@ from pygame import *
 from source.agent_importer import import_agent
 from source.core.agent import Agent
 from source.core.board import Board, PLAYER_1_PIECE, PLAYER_2_PIECE
-from source.core.game_state import GameStat
+from source.core.game_state import GameState
 
 
 # test_board = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0],

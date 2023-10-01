@@ -175,8 +175,16 @@ class Board:
         return True
 
     def get_window(self, x: int, y: int, dx: int, dy: int, length: int):
-
-
+        result = []
+        for i in range(length):
+            pos_x = i * dx + x
+            pos_y = i * dy + y
+            if pos_x >= self.width or pos_y < 0:
+                raise Exception(f"x-value out of bounds\nGot: {pos_x}\nExpected: [0-{self.width - 1}]")
+            if pos_y >= self.height or pos_y < 0:
+                raise Exception(f"y-value out of bounds\nGot: {pos_y}\nExpected: [0-{self.height - 1}]")
+            result.append(self.get_piece_at(pos_x, pos_y))
+        return result
 
 
 def beautify_board(board: Board) -> str:
