@@ -28,7 +28,7 @@ class MinimaxAgent(Agent):
         for move in options:
             board.make_move(move, my_piece)
             eval_i = evaluate(board, in_a_row)
-            if board.get_board_state(4) != GameState.IN_PROGRESS:
+            if board.get_board_state(in_a_row) != GameState.IN_PROGRESS:
                 board.unmake_move()
                 return move
 

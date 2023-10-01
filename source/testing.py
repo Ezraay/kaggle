@@ -16,7 +16,7 @@ def test(agent1, agent2, g_num, verbose=False):
         board.create((7, 6))
 
         # Start the game and run until completion
-        game = Game(agent1, agent2, board)
+        game = Game(agent1, agent2, board, 4)
         game.tick_to_completion()
 
         # Display the results, board state, and move history
@@ -42,4 +42,4 @@ def test(agent1, agent2, g_num, verbose=False):
 m = MinimaxAgent()
 r = RandomAgent()
 
-print(test(r, m, 25, False))
+print(test(m, m, 25, False))

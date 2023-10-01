@@ -41,7 +41,7 @@ def evaluate(board: Board, in_a_row: int):
             i += 1
 
     # upper-left to bottom-right
-    for y in range(board.height - in_a_row + 1, board.height):
+    for y in range(in_a_row - 1, board.height):
         for x in range(board.width - in_a_row + 1):
             window = board.get_window(x, y, 1, -1, in_a_row)
             score += evaluate_window(window, in_a_row)
