@@ -7,6 +7,7 @@ from source.core.board import Board, beautify_board
 from source.core.colours import GREEN, CLEAR, RED
 from source.core.game import Game
 from source.core.game_state import GameState
+from source.database.mongo_database import MongoDatabase
 
 
 def main():

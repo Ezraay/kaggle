@@ -9,124 +9,6 @@ from source.core.game_state import GameState
 from source.core.evaluation import evaluate
 
 
-
-# test_board = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0],
-# [0, 0, 0, 0, 0, 0, 0],[0, 1, 0, 2, 0, 0, 0], [1, 2, 1, 1, 2, 0, 2]]
-
-
-def evaluate_window(window):
-    score = 0
-
-    if window.count(1) == 4:
-        return 10000, True
-
-    if window.count(2) == 4:
-        return -10000, True
-
-    elif window.count(1) == 3 and window.count(0) == 1:
-        score += 5
-
-    elif window.count(2) == 3 and window.count(0) == 1:
-        score -= 5
-
-    elif window.count(1) == 2 and window.count(0) == 2:
-        score += 2
-
-    elif window.count(2) == 2 and window.count(0) == 2:
-        score -= 2
-
-    return score, False
-
-def evaluate_old(board_i):
-    board = board_i.to_array()
-    # board = board_i
-    score = 0
-    c_arr = []
-
-    # for i in range(len(board)):
-    #     for j in range(len(board[i])):
-    #         if j == 3:
-    #             c_arr.append(board[i][j])
-    #
-    # c_count = c_arr.count(1)
-    # score += c_count * 3
-    #
-    # c_count = c_arr.count(2)
-    # score -= c_count * 3
-
-    rows = 6 # height
-    cols = 7
-
-    # horizontal
-    for i in range(rows):
-        for j in range(cols - 3):
-            window = [board[j][i], board[j + 1][i], board[j + 2][i], board[j + 3][i]]
-            res = evaluate_window(window)
-            score += res[0]
-            if res[1]:
-                return score
-
-    # vertical
-    for k in range(cols):
-        for l in range(rows - 3):
-            window = [board[k][l], board[k][l + 1], board[k][l + 2], board[k][l + 3]]
-            res = evaluate_window(window)
-            score += res[0]
-            if res[1]:
-                return score
-
-    # diagonal up
-    for m in range(cols - 3):
-        for n in range(rows - 3):
-            window = [board[m][n], board[m + 1][n + 1], board[m + 2][n + 2], board[m + 3][n + 3]]
-            res = evaluate_window(window)
-            score += res[0]
-            if res[1]:
-                return score
-
-    # diagonal down
-    for o in range(cols - 4):
-        for p in range(rows - 3, rows + 1):
-            window = [board[p][o], board[p - 1][o + 1], board[p - 2][o + 2], board[p - 3][o + 3]]
-            res = evaluate_window(window)
-            score += res[0]
-            if res[1]:
-                return score
-
-    return score
-
-def minimax(board, depth, maximiser):
-
-    outcome = board.get_board_state(4)
-
-    if depth == 0 or outcome != GameState.IN_PROGRESS:
-        if outcome == GameState.PLAYER1_WON:
-            return 10000000
-        elif outcome == GameState.PLAYER2_WON:
-            return -10000000
-        else:
-            return evaluate_old(board)
-
-    if maximiser:
-        max_eval = -math.inf
-        for move in range(board.width):
-            if board.can_make_move(move):
-                board.make_move(move, 1)
-                evalu = minimax(board, depth - 1, False)
-                max_eval = max(max_eval, evalu)
-                board.revert(move)
-        return max_eval
-
-    else:
-        min_eval = math.inf
-        for move in range(board.width):
-            if board.can_make_move(move):
-                board.make_move(move, 2)
-                evalu = minimax(board, depth - 1, True)
-                min_eval = min(min_eval, evalu)
-                board.revert(move)
-        return min_eval
-
 def visualise(board: Board, agent: Agent = None):
     """
     :param board: a 2d array with None, 1 or 2 in each subarray
@@ -241,13 +123,19 @@ def visualise(board: Board, agent: Agent = None):
 
         pygame.display.flip()
 
+def visualise_history(history: list[int]):
+    pass
+
 def create_config():
     # create a dictionary contains changeable 
     import argparse
     parser = argparse.ArgumentParser(description="Visualises a Connect 4 game.",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     # parser.add_argument("board", help="Board state to display")
-    parser.add_argument('--versus', help='Agent to play againFst', required=False)
+    # parser.add_argument('--versus', help='Agent to play againFst', required=False)
+    # parser.add_argument('--show-hint', help='Whether to show evaluation of each move', required=False, type=bool)
+    parser.add_argument("--agent1", help="Path to first player's agent", required=False)
+    parser.add_argument("--agent2", help="Path to second player's agent", required=False)
     args = parser.parse_args()
     config = vars(args)
     return config
@@ -261,14 +149,30 @@ def main():
     board = Board()
     board.create((7, 6))
 
-    if config['versus'] is None:
-        # Player v Player game
-        visualise(board)
-    else:
-        agent_name = config['versus']
-        agent_class = import_agent(agent_name)
-        agent = agent_class()
-        visualise(board, agent)
+    from visualiser.setup import Visualiser
+    board_size = (7, 6)
+    in_a_row = 4
+    visualiser = Visualiser(board_size, in_a_row)
+    if config['agent1'] is not None and config['agent2'] is not None:
+        agent1_name = config['agent1']
+        agent1_class = import_agent(agent1_name)
+        agent1 = agent1_class()
+        agent2_name = config['agent2']
+        agent2_class = import_agent(agent2_name)
+        agent2 = agent2_class()
+        visualiser.agent_versus_agent(agent1, agent2)
+
+
+
+
+    # if config['versus'] is None:
+    #     # Player v Player game
+    #     visualise(board)
+    # else:
+    #     agent_name = config['agent1']
+    #     agent_class = import_agent(agent_name)
+    #     agent = agent_class()
+    #     visualise(board, agent)
 
 if __name__ == "__main__":
     main()

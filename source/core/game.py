@@ -41,6 +41,10 @@ class Game:
         self.game_state = GameState.IN_PROGRESS
         self.running = True
 
+    @property
+    def board(self):
+        return self.__board_copy
+
 
     def tick(self):
         # Performs a single game move for the current agent. Updates game state.
