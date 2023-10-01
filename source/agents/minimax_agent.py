@@ -11,13 +11,21 @@ class MinimaxAgent(Agent):
         max_eval = -math.inf
 
         for move in options:
-            copy_b = board.copy()
-            copy_b.make_move(move, 1)
-            eval = evaluate(copy_b)
+            min_eval = math.inf
+            board.make_move(move, 1)
+            eval_i = evaluate(board)
 
-            if eval > max_eval:
-                max_eval = eval
+            opponent_options = [x for x in list(range(board.width)) if board.can_make_move(x)]
+            for opp_move in opponent_options:
+                board.make_move(opp_move, 2)
+
+                eval_o = evaluate(board)
+                eval_i = min(eval_i, eval_o)
+                board.unmake_move()
+            board.unmake_move()
+
+            if eval_i > max_eval:
+                max_eval = eval_i
                 best_move = move
-
 
         return best_move
