@@ -42,4 +42,4 @@ def test(agent1, agent2, g_num, verbose=False):
 m = MinimaxAgent()
 r = RandomAgent()
 
-print(test(r, m, 100, False))
+print(test(r, m, 25, False))

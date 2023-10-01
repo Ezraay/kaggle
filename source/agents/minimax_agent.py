@@ -8,7 +8,7 @@ from source.core.game_state import GameState
 
 class MinimaxAgent(Agent):
 
-    def get_move(self, board: Board, my_piece: int) -> int:
+    def get_move(self, board: Board, my_piece: int, in_a_row: int) -> int:
 
         if my_piece == 1:
             opp_piece = 2
@@ -27,7 +27,7 @@ class MinimaxAgent(Agent):
 
         for move in options:
             board.make_move(move, my_piece)
-            eval_i = evaluate(board)
+            eval_i = evaluate(board, in_a_row)
             if board.get_board_state(4) != GameState.IN_PROGRESS:
                 board.unmake_move()
                 return move
@@ -36,7 +36,7 @@ class MinimaxAgent(Agent):
 
             for opp_move in opponent_options:
                 board.make_move(opp_move, opp_piece)
-                eval_o = evaluate(board)
+                eval_o = evaluate(board, in_a_row)
                 board.unmake_move()
                 if maximise:
                     eval_i = min(eval_i, eval_o)

@@ -2,48 +2,49 @@ from source.core.board import *
 from source.core.game import Game
 from source.agents.random_agent import RandomAgent
 
-def evaluate_window(window: list[int]):
+def evaluate_window(window: list[int], in_a_row: int):
     score = 0
 
-    # check for 4 in a row
-    if window.count(1) == 4:
+    # check for n in a row
+    if window.count(1) == in_a_row:
         score += 1000000
 
-    if window.count(2) == 4:
+    if window.count(2) == in_a_row:
         score -= 1000000
 
+    # add x^2 or exponential func for other vals (2+), also needs to account for opps, empty spots
     return score
 
-def evaluate(board: Board):
+def evaluate(board: Board, in_a_row: int):
     score = 0
     i = 0
 
     # horizontal
     for y in range(board.height):
-        for x in range(board.width - 3):
-            window = board.get_window(x, y, 1, 0, 4)
-            score += evaluate_window(window)
+        for x in range(board.width - in_a_row + 1):
+            window = board.get_window(x, y, 1, 0, in_a_row)
+            score += evaluate_window(window, in_a_row)
             i += 1
 
     # vertical
-    for y in range(board.height - 3):
+    for y in range(board.height - in_a_row + 1):
         for x in range(board.width):
-            window = board.get_window(x, y, 0, 1, 4)
-            score += evaluate_window(window)
+            window = board.get_window(x, y, 0, 1, in_a_row)
+            score += evaluate_window(window, in_a_row)
             i += 1
 
     # bottom-left to upper-right
-    for y in range(board.height - 3):
-        for x in range(board.width - 3):
-            window = board.get_window(x, y, 1, 1, 4)
-            score += evaluate_window(window)
+    for y in range(board.height - in_a_row + 1):
+        for x in range(board.width - in_a_row + 1):
+            window = board.get_window(x, y, 1, 1, in_a_row)
+            score += evaluate_window(window, in_a_row)
             i += 1
 
     # upper-left to bottom-right
-    for y in range(board.height - 3, board.height):
-        for x in range(board.width - 3):
-            window = board.get_window(x, y, 1, -1, 4)
-            score += evaluate_window(window)
+    for y in range(board.height - in_a_row + 1, board.height):
+        for x in range(board.width - in_a_row + 1):
+            window = board.get_window(x, y, 1, -1, in_a_row)
+            score += evaluate_window(window, in_a_row)
             i += 1
 
     return score
