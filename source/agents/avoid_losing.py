@@ -3,7 +3,7 @@ from source.core.board import Board
 from random_agent import RandomAgent
 
 class Avoid_Losing(RandomAgent):
-    def get_move(self, board: Board, my_piece: int) -> int:
+    def get_move(self, board: Board, my_piece: int, in_a_row: int) -> int:
         move = self.immediate_win(board,my_piece)
         if move != None:
             return move

@@ -43,7 +43,7 @@ def check_winning_move(self, board: Board, piece):
 
 class ImmediateWinAgent(RandomAgent):
 
-    def get_move(self, board: Board, my_piece: int) -> int:
+    def get_move(self, board: Board, my_piece: int, in_a_row: int) -> int:
         oppo_piece = PLAYER_1_PIECE if my_piece == PLAYER_2_PIECE else PLAYER_2_PIECE
         candidate = check_winning_move(board,my_piece)
         win_moves = [i for i in range(board.width) if board.can_make_move(i) and candidate]

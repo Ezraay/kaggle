@@ -52,7 +52,7 @@ class Game:
         current_agent = self.__agent1 if self.__turn % 2 == 0 else self.__agent2
         my_piece = self.__turn % 2 + 1
         start = time.time()
-        move = current_agent.get_move(self.__board_copy, my_piece)
+        move = current_agent.get_move(self.__board_copy, my_piece, self.__in_a_row)
         if not self.__board_copy.equals(self.__board):
             raise Exception("Board copy not returned to original state, check do/undo's")
         t = time.time() - start

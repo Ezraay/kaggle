@@ -120,7 +120,7 @@ class SmartAgent(Agent):
                     board.unmake_move()
             return min_eval
 
-    def get_move(self, board, my_piece: int):
+    def get_move(self, board, my_piece: int, in_a_row: int):
         if my_piece == 1:
             best_move = None
             max_eval = -math.inf
