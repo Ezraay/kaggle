@@ -40,7 +40,7 @@ def evaluate(board: Board):
     # upper-left to bottom-right
     for y in range(board.height - 3, board.height):
         for x in range(board.width - 3):
-            window = board.get_window(x, y, -1, -1, 4)
+            window = board.get_window(x, y, 1, -1, 4)
             score += evaluate_window(window)
 
     return score

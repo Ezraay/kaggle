@@ -180,7 +180,7 @@ class Board:
         for i in range(length):
             pos_x = i * dx + x
             pos_y = i * dy + y
-            if pos_x >= self.width or pos_y < 0:
+            if pos_x >= self.width or pos_x < 0:
                 raise Exception(f"x-value out of bounds\nGot: {pos_x}\nExpected: [0-{self.width - 1}]")
             if pos_y >= self.height or pos_y < 0:
                 raise Exception(f"y-value out of bounds\nGot: {pos_y}\nExpected: [0-{self.height - 1}]")
