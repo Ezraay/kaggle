@@ -174,6 +174,9 @@ class Board:
                 return False
         return True
 
+    def get_window(self, x: int, y: int, dx: int, dy: int, length: int):
+
+
 
 
 def beautify_board(board: Board) -> str:

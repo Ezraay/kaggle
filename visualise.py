@@ -1,11 +1,11 @@
-# a module for writing vidoe game
+# a module for writing video game
 import pygame
 from pygame import *
 
 from source.agent_importer import import_agent
 from source.core.agent import Agent
 from source.core.board import Board, PLAYER_1_PIECE, PLAYER_2_PIECE
-from source.core.game_state import GameState
+from source.core.game_state import GameStat
 
 
 # test_board = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0],
@@ -35,48 +35,95 @@ def evaluate_window(window):
 
     return score, False
 
-
 def evaluate(board_i):
     board = board_i.to_array()
+    # board = board_i
     score = 0
+    c_arr = []
+
+    # for i in range(len(board)):
+    #     for j in range(len(board[i])):
+    #         if j == 3:
+    #             c_arr.append(board[i][j])
+    #
+    # c_count = c_arr.count(1)
+    # score += c_count * 3
+    #
+    # c_count = c_arr.count(2)
+    # score -= c_count * 3
+
+    rows = 6
+    cols = 7
 
     # horizontal
-    for r in range(len(board)):
-        r_array = board[r]
-        for c in range(4):
-            window = r_array[c: c + 4]
-            score += evaluate_window(window)[0]
-
-    # vertical
-    transposed = []
-    for c in range(len(board[0])):
-        col_ar = []
-        for r in range(len(board)):
-            col_ar.append(board[r][c])
-        transposed.append(col_ar)
-
-    for r in range(len(transposed)):
-        r_array = transposed[r]
-        for c in range(4):
-            window = r_array[c: c + 4]
-            score += evaluate_window(window)[0]
-            if evaluate_window(window)[1]:
+    for i in range(rows):
+        for j in range(cols - 3):
+            window = [board[j][i], board[j + 1][i], board[j + 2][i], board[j + 3][i]]
+            res = evaluate_window(window)
+            score += res[0]
+            if res[1]:
                 return score
 
-    # pos diag (Up Right)
-    for r in range(len(board) - 3):
-        for c in range(len(board[0]) - 3):
-            window = [board[r + i][c - i] for i in range(4)]
-            score += evaluate_window(window)[0]
+    # vertical
+    for k in range(cols):
+        for l in range(rows - 3):
+            window = [board[k][l], board[k][l + 1], board[k][l + 2], board[k][l + 3]]
+            res = evaluate_window(window)
+            score += res[0]
+            if res[1]:
+                return score
 
-    # neg diag (Down Left)
-    for r in range(len(board) - 3):
-        for c in range(len(board[0]) - 3):
-            window = [board[r + 3 - i][c + 3 - i] for i in range(4)]
-            score += evaluate_window(window)[0]
+    # diagonal up
+    for m in range(cols - 3):
+        for n in range(rows - 3):
+            window = [board[m][n], board[m + 1][n + 1], board[m + 2][n + 2], board[m + 3][n + 3]]
+            res = evaluate_window(window)
+            score += res[0]
+            if res[1]:
+                return score
+
+    # diagonal down
+    for o in range(cols - 4):
+        for p in range(rows - 3, rows + 1):
+            window = [board[p][o], board[p - 1][o + 1], board[p - 2][o + 2], board[p - 3][o + 3]]
+            res = evaluate_window(window)
+            score += res[0]
+            if res[1]:
+                return score
 
     return score
 
+def minimax(board, depth, maximiser):
+
+    outcome = board.get_board_state(4)
+
+    if depth == 0 or outcome != GameState.IN_PROGRESS:
+        if outcome == GameState.PLAYER1_WON:
+            return 10000000
+        elif outcome == GameState.PLAYER2_WON:
+            return -10000000
+        else:
+            return evaluate(board)
+
+    if maximiser:
+        max_eval = -math.inf
+        for move in range(board.width):
+            if board.can_make_move(move):
+                board.make_move(move, 1)
+                evalu = minimax(board, depth - 1, False)
+                max_eval = max(max_eval, evalu)
+                board.revert(move)
+        return max_eval
+
+    else:
+        min_eval = math.inf
+        for move in range(board.width):
+            if board.can_make_move(move):
+                board.make_move(move, 2)
+                evalu = minimax(board, depth - 1, True)
+                min_eval = min(min_eval, evalu)
+                board.revert(move)
+        return min_eval
 
 def visualise(board: Board, agent: Agent = None):
     """
@@ -192,7 +239,6 @@ def visualise(board: Board, agent: Agent = None):
 
         pygame.display.flip()
 
-
 def create_config():
     # create a dictionary contains changeable 
     import argparse
@@ -221,23 +267,6 @@ def main():
         agent_class = import_agent(agent_name)
         agent = agent_class()
         visualise(board, agent)
-
-    # board_value = config["board"].strip()
-    # board = []
-    # try:
-    #     for row_value in board_value[1: -1].split("],"):
-    #         row = []
-    #         for piece in row_value.strip()[1:]:
-    #             if piece.isdigit():
-    #                 row.append(int(piece))
-    #         board.append(row)
-    # except:
-    #     print("Error parsing board state")
-    #     raise
-    #
-    # print(board)
-    # visualise(board)
-
 
 if __name__ == "__main__":
     main()
