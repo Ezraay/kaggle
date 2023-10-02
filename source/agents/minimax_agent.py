@@ -48,7 +48,66 @@ class MinimaxAgent(Agent):
 
         return score
 
+    def minimax(self, board: Board, depth: int, max_player: bool, player: int, opponent: int, in_a_row: int):
+        current_eval = self.evaluate(board, in_a_row)
+
+        if depth == 0 or board.get_board_state(in_a_row) != GameState.IN_PROGRESS:
+            return current_eval
+
+        if max_player:
+            max_eval = -99999999
+            options = [x for x in list(range(board.width)) if board.can_make_move(x)]
+
+            for move in options:
+                new_b = board.copy()
+                new_b.make_move(move, player)
+                eval = self.minimax(new_b, depth - 1, False, player, opponent, in_a_row)
+                max_eval = max(max_eval, eval)
+            return max_eval
+
+        else:
+            min_eval = 99999999
+            options = [x for x in list(range(board.width)) if board.can_make_move(x)]
+
+            for move in options:
+                new_b = board.copy()
+                new_b.make_move(move, opponent)
+                eval = self.minimax(new_b, depth - 1, True, player, opponent, in_a_row)
+                min_eval = min(min_eval, eval)
+            return min_eval
+
     def get_move(self, board: Board, my_piece: int, in_a_row: int) -> int:
+
+        opponent = 3 - my_piece
+
+        best_move = None
+
+        if my_piece == 1:
+            max_eval = -9999999
+            max = True
+        else:
+            min_eval = 9999999
+            max = False
+
+        options = [x for x in list(range(board.width)) if board.can_make_move(x)]
+
+        for move in options:
+            new_b = board.copy()
+            new_b.make_move(move, my_piece)
+            eval = self.minimax(new_b, self.depth, max, my_piece, opponent, in_a_row)
+
+            if max:
+                if eval > max_eval:
+                    max_eval = eval
+                    best_move = move
+            else:
+                if eval < min_eval:
+                    min_eval = eval
+                    best_move = move
+
+        return best_move
+
+    def get_move_old(self, board: Board, my_piece: int, in_a_row: int) -> int:
 
         if my_piece == 1:
             opp_piece = 2

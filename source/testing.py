@@ -43,6 +43,6 @@ def test(agent1, agent2, g_num, verbose=False):
 
 m = SmartMinimaxAgent()
 
-r = BasicMinimaxAgent()
+r = RandomAgent()
 
-print(test(m, r, 10, True))
+print(test(r, m, 100, False))
