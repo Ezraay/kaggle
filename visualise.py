@@ -111,7 +111,7 @@ def visualise(board: Board, agent: Agent = None):
     pygame.init()
     pygame.font.init()
     my_font = pygame.font.SysFont('Comic Sans MS', 30)
-    screen = pygame.display.set_mode((screen_width, screen_height))
+    screen = pygame.display.set_mode((screen_width+10, screen_height))
 
     def get_board_column(mouse_position: tuple[int, int]):
         result = mouse_position[0] / piece_size
@@ -158,6 +158,7 @@ def visualise(board: Board, agent: Agent = None):
                 pos = pygame.mouse.get_pos()
                 column = get_board_column(pos)
                 make_move(column)
+                
                 # current_turn = PLAYER_1_PIECE if current_turn == PLAYER_2_PIECE else PLAYER_2_PIECE
             if event.type == pygame.KEYDOWN:
                 if event.key == K_z:
@@ -165,8 +166,14 @@ def visualise(board: Board, agent: Agent = None):
                         board.unmake_move()
                         current_turn = PLAYER_1_PIECE if current_turn == PLAYER_2_PIECE else PLAYER_2_PIECE
                         evaluations = calculate_evaluations(board, current_turn)
-
         screen.fill((0, 0, 255))
+        white = (255,255,255)
+        pygame.draw.rect(screen, white, pygame.Rect(screen_width, 0, 10, screen_height),2)
+        h_percentage = evaluate(board) /50
+        pygame.draw.rect(screen, white, pygame.Rect(screen_width, 
+                                                    screen_height/2-h_percentage*screen_height/2, 
+                                                    10, 
+                                                    screen_height + h_percentage*screen_height/2))
         for col in range(width):
             for row in range(height):
                 piece = board.get_piece_at(col, row)
@@ -241,3 +248,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # python visualise.py --versus RandomAgent
