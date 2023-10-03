@@ -169,7 +169,7 @@ def visualise(board: Board, agent: Agent = None):
         screen.fill((0, 0, 255))
         white = (255,255,255)
         pygame.draw.rect(screen, white, pygame.Rect(screen_width, 0, 10, screen_height),2)
-        h_percentage = evaluate(board) /50
+        h_percentage = evaluate(board) /30
         pygame.draw.rect(screen, white, pygame.Rect(screen_width, 
                                                     screen_height/2-h_percentage*screen_height/2, 
                                                     10, 
