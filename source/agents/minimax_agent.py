@@ -7,7 +7,7 @@ from source.core.board import Board
 from source.core.game_state import GameState
 
 class MinimaxAgent(Agent):
-    def __init__(self, depth=2):
+    def __init__(self, depth=3):
         self.depth = depth
 
     @abstractmethod
@@ -57,6 +57,7 @@ class MinimaxAgent(Agent):
         if max_player:
             max_eval = -99999999
             options = [x for x in list(range(board.width)) if board.can_make_move(x)]
+            random.shuffle(options)
 
             for move in options:
                 new_b = board.copy()
@@ -68,6 +69,7 @@ class MinimaxAgent(Agent):
         else:
             min_eval = 99999999
             options = [x for x in list(range(board.width)) if board.can_make_move(x)]
+            random.shuffle(options)
 
             for move in options:
                 new_b = board.copy()
@@ -90,6 +92,7 @@ class MinimaxAgent(Agent):
             max = False
 
         options = [x for x in list(range(board.width)) if board.can_make_move(x)]
+        random.shuffle(options)
 
         for move in options:
             new_b = board.copy()
