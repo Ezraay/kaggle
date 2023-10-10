@@ -1,8 +1,8 @@
 import random
 from source.core.board import Board
-from random_agent import RandomAgent
+from source.agents.random_agent import RandomAgent
 
-class Avoid_Losing(RandomAgent):
+class AvoidLosing(RandomAgent):
     def get_move(self, board: Board, my_piece: int, in_a_row: int) -> int:
         move = self.immediate_win(board,my_piece)
         if move != None:
@@ -137,9 +137,9 @@ for i in m:
     else:
         p = 1
     b.make_move(i,p)
-print(b)
+#print(b)
 
-print(b.get_board_state(4))
-a = Avoid_Losing()
-res = a.get_move(b,2)
-print(res)
+# print(b.get_board_state(4))
+# a = Avoid_Losing()
+# res = a.get_move(b,2)
+# print(res)
