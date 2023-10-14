@@ -77,21 +77,21 @@ function correctly. The project assumes the root folder is `source/` from the lo
 To run the project, use the command line or create launch profiles in your IDE.
 
 ```bash
-python ./main.py --help
+python ./simulation.py --help
 ```
 
 The above command will show more information about specific command line arguments you can pass into the
 program. To simulate a game between two agents, use the following command:
 
 ```bash
-python ./main.py RandomAgent RandomAgent
+python ./simulation.py RandomAgent RandomAgent
 ```
 
 ## Writing to a database
 The simulation currently has functionality to write to a MongoDB database. The simulation will write a history of the 
 game, the final state, which 2 agents played, and the datetime of simulation.
 ```bash
-python ./main.py --write-database "mongodb://localhost:27017" RandomAgent RandomAgent
+python ./simulation.py --write-database "mongodb://localhost:27017" RandomAgent RandomAgent
 ```
 
 ## Where are the agents?

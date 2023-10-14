@@ -1,3 +1,5 @@
+import math
+
 import pygame
 
 from source.core.board import Board
@@ -19,6 +21,7 @@ class Display:
         self.__empty_scaled = pygame.transform.scale(empty, cell_size_tuple)
 
     def start(self, board_size):
+        self.__num_columns = board_size[0]
         pygame.display.set_caption("Connect-X Visualisation Demo")
         pygame.init()
         pygame.font.init()
@@ -43,3 +46,8 @@ class Display:
                 elif piece == 0:
                     self.__screen.blit(self.__empty_scaled, position)
         pygame.display.flip()
+
+    def to_board_column(self, screen_position):
+        x = screen_position[0]
+        column =(x - self.WINDOW_PADDING) / (self.CELL_SIZE + 2 * self.CELL_PADDING)
+        return math.floor(min(self.__num_columns - 1, max(0, column)))

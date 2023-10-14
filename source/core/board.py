@@ -3,7 +3,7 @@ import sys
 import source.core.board
 
 sys.path.append('C:\\Users\\jacky\\Documents\\Uni\\y3s2\\FIT3163\\Project Kaggle\\kaggle\\source')
-from source.core.colours import GREEN, RED, CLEAR
+from source.core.colours import GREEN, RED, CLEAR, YELLOW
 from source.core.game_state import GameState
 
 PLAYER_1_PIECE = 1
@@ -123,26 +123,6 @@ class Board:
                     current_in_a_row += 1
                     if current_in_a_row == in_a_row and piece != EMPTY_PIECE:
                         return piece_to_winner(piece)
-
-        # for x in range(self.size[0]):
-        #     for y in range(self.__heights[x]):
-        #         piece = self.__board[x][y]
-        #
-        #         # Horizontal
-        #         if x + in_a_row < self.size[0]:
-        #             for i in range(in_a_row):
-        #                 if self.__board[x + i][y] != piece:
-        #                     break
-        #             else:
-        #                 return GameState.PLAYER1_WON if piece == PLAYER_1_PIECE else GameState.PLAYER2_WON
-        #
-        #         # Vertical
-        #         if y + in_a_row <= self.__heights[x]:
-        #             for i in range(in_a_row):
-        #                 if self.__board[x][y + i] != piece:
-        #                     break
-        #             else:
-        #                 return GameState.PLAYER1_WON if piece == PLAYER_2_PIECE else GameState.PLAYER2_WON
         return GameState.IN_PROGRESS
 
     def to_array(self):
@@ -155,7 +135,8 @@ class Board:
         for y in range(self.__size[1] - 1, -1, -1):
             for x in range(self.__size[0]):
                 result += "[" + str(self.__board[x][y]) + "]"
-            result += "\n"
+            if y != 0:
+                result += "\n"
         return result
 
     def copy(self):
@@ -191,8 +172,8 @@ class Board:
 
 def beautify_board(board: Board) -> str:
     board_values = str(board)
-    board_values = board_values.replace(f"[{PLAYER_2_PIECE}]", RED + "[@]")
-    board_values = board_values.replace(f"[{PLAYER_1_PIECE}]", GREEN + "[#]")
+    board_values = board_values.replace(f"[{PLAYER_1_PIECE}]", RED + "[#]")
+    board_values = board_values.replace(f"[{PLAYER_2_PIECE}]", YELLOW + "[@]")
     board_values = board_values.replace(f"[{EMPTY_PIECE}]", CLEAR + " ' ")
     board_values += CLEAR
     return board_values
