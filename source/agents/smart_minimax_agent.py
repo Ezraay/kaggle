@@ -11,5 +11,17 @@ class SmartMinimaxAgent(MinimaxAgent):
         if window.count(2) == in_a_row:
             score -= 1000000
 
+        if window.count(1) == in_a_row - 1:
+            score += 5
+
+        if window.count(2) == in_a_row - 1:
+            score -= 5
+
+        if window.count(2) == in_a_row - 1 and window.count(1) == 1:
+            score += 1
+
+        if window.count(1) == in_a_row - 1 and window.count(2) == 1:
+            score += 1
+
         # add x^2 or exponential func for other vals (2+), also needs to account for opps, empty spots
         return score
