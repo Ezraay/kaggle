@@ -12,49 +12,58 @@ from source.database.mongo_database import MongoDatabase
 from visualiser.setup import Visualiser
 
 
-def simulate(agent1_name, agent2_name, database: MongoDatabase, board_size, in_a_row: int):
+def simulate(agent1_name, agent2_name, database: MongoDatabase, board_size, in_a_row: int, count: int):
     agent1_class = import_agent(agent1_name)
     agent2_class = import_agent(agent2_name)
 
     # Initialize agents and the board
     agent1: Agent = agent1_class()
     agent2: Agent = agent2_class()
-    board = Board()
-    board.create(board_size)
+    results = [0, 0, 0, 0]
 
-    # Start the game and run until completion
-    game = Game(agent1, agent2, board, in_a_row)
-    game.tick_to_completion()
+    for i in range(count):
+        board = Board()
+        board.create(board_size)
 
-    # Display the results, board state, and move history
-    print(beautify_board(board))
+        # Start the game and run until completion
+        game = Game(agent1, agent2, board, in_a_row)
+        game.tick_to_completion()
 
-    # Print the game outcome
-    if game.game_state == GameState.PLAYER1_WON:
-        print(f"{RED}Player 1 Won")
-    if game.game_state == GameState.PLAYER2_WON:
-        print(f"{YELLOW}Player 2 Won")
-    if game.game_state == GameState.TIE:
-        print(f"{CLEAR}Game ended in a tie")
-    print(CLEAR + "History:")
-    print(game.history)
+        # Display the results, board state, and move history
 
-    if database is not None:
-        database.write_game(game.history, game.game_state, agent1, agent2, datetime.now())
-
+        # Print the game outcome
+        if count == 1:
+            print(beautify_board(board))
+            if game.game_state == GameState.PLAYER1_WON:
+                print(f"{RED}Player 1 Won")
+            if game.game_state == GameState.PLAYER2_WON:
+                print(f"{YELLOW}Player 2 Won")
+            if game.game_state == GameState.TIE:
+                print(f"{CLEAR}Game ended in a tie")
+            print(CLEAR + "History:")
+            print(game.history)
+            if database is not None:
+                database.write_game(game.history, game.game_state, agent1, agent2, datetime.now())
+        else:
+            results[game.game_state] += 1
+    if count > 1:
+        print(f'{RED}Player 1 {CLEAR} won {results[GameState.PLAYER1_WON]} times')
+        print(f'{YELLOW}Player 2 {CLEAR} won {results[GameState.PLAYER2_WON]} times')
+        print(f'Tie happened {results[GameState.TIE]} times')
 
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Tool for testing and visualising Connect 4 games.",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("mode", help="Mode in which to run the program", choices=['simulate', 'visualise', 'versus'])
+    parser.add_argument("mode", help="Mode in which to run the program", choices=['simulate', 'visualise'])
     parser.add_argument('agent1', nargs='?')
     parser.add_argument('agent2', nargs='?')
     parser.add_argument("--seed", help="Seed for random module", required=False, type=int)
+    parser.add_argument("--count", help="Number of games to simulate", required=False, type=int, const=1, nargs="?", default=1)
     parser.add_argument("--write-database", help="Database to write results to", required=False, type=str)
     parser.add_argument("--inarow", help="How many in a row to win", required=False, type=int, const=1, nargs="?", default=4)
-    parser.add_argument("--width", help="Width of the board", required=False, type=int, const=1, nargs="?", default=6)
-    parser.add_argument("--height", help="Height of the board", required=False, type=int, const=1, nargs="?", default=7)
+    parser.add_argument("--width", help="Width of the board", required=False, type=int, const=1, nargs="?", default=7)
+    parser.add_argument("--height", help="Height of the board", required=False, type=int, const=1, nargs="?", default=6)
 
     args = parser.parse_args()
     config = vars(args)
@@ -77,7 +86,7 @@ def main():
         else:
             database = MongoDatabase()
             database.connect(connection_string)
-        simulate(config['agent1'], config['agent2'], database, board_size, in_a_row)
+        simulate(config['agent1'], config['agent2'], database, board_size, in_a_row, config['count'])
     elif mode == "visualise":
         board = Board()
         board.create(board_size)
@@ -99,8 +108,6 @@ def main():
             visualiser.player_versus_player()
         else:
             parser.error('No valid configuration found to visualise')
-    elif mode == "versus":
-        pass
 
 
 if __name__ == "__main__":

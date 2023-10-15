@@ -7,7 +7,7 @@ from source.core.board import Board
 from source.core.game_state import GameState
 
 class MinimaxAgent(Agent):
-    def __init__(self, depth=3):
+    def __init__(self, depth=4):
         self.depth = depth
 
     @abstractmethod
