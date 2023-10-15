@@ -111,7 +111,7 @@ class AvoidLosing(RandomAgent):
             p = options[i]
             board.make_move(p,my_piece)
             if self.immediate_win(c,opp_piece) != None:
-                no_move.append = options[i]
+                no_move.append(options[i])
             ####
             board.unmake_move()
         no_lose_opt = [x for x in options if x not in no_move]

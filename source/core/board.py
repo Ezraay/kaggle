@@ -2,7 +2,6 @@ import sys
 
 import source.core.board
 
-sys.path.append('C:\\Users\\jacky\\Documents\\Uni\\y3s2\\FIT3163\\Project Kaggle\\kaggle\\source')
 from source.core.colours import GREEN, RED, CLEAR, YELLOW
 from source.core.game_state import GameState
 
