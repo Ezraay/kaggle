@@ -2,9 +2,9 @@ import copy
 import random
 from source.core.board import Board, PLAYER_1_PIECE,PLAYER_2_PIECE
 from source.core.game_state import GameState
-from random_agent import RandomAgent
+from source.agents.random_agent import RandomAgent
 
-def check_winning_move(self, board: Board, piece):
+def check_winning_move(board: Board, piece):
     # https://roboticsproject.readthedocs.io/en/latest/ConnectFourAlgorithm.html
     can_win = True
     # 1. check for horizontal location for winning move

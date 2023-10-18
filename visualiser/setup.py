@@ -1,3 +1,5 @@
+import random
+
 import pygame
 from pygame import *
 
@@ -17,7 +19,12 @@ class Visualiser:
         self.__display = Display()
         self.__display.start((self.__board.width, self.__board.height))
 
-    def agent_versus_agent(self, agent1: Agent, agent2: Agent):
+    def agent_versus_agent(self, agent1: Agent, agent2: Agent, seed = None):
+        if seed is None:
+            seed = random.randint(0, 1000000)
+        print("Seed: " + str(seed))
+        random.seed(seed)
+        
         game = Game(agent1, agent2, self.__board, self.__in_a_row)
         game.tick_to_completion()
         history = game.history
@@ -56,6 +63,7 @@ class Visualiser:
                         self.__board.make_move(column, current_turn)
                         current_turn = 3 - current_turn
                         running = self.__board.get_board_state(self.__in_a_row) == GameState.IN_PROGRESS
+                        print(self.__board)
             self.__display.draw(self.__board)
 
     def player_versus_agent(self, agent: Agent, player_starts: bool):

@@ -66,6 +66,8 @@ class Game:
         elif self.__turn -1 <= 0 and t > 60 :
             raise TimeoutError(("Player " + str(my_piece) + " fails inital turn limits.\n " + 
                                 str(t) + " seconds. Expect within 60 seconds."))
+        if not isinstance(move, int):
+            raise ValueError("Result needs to be an int, got: " + str(type(move)))
         if not self.__board.can_make_move(move):
             raise ValueError("Can't place cell at x=" + str(move))
 
