@@ -115,6 +115,8 @@ class AvoidLosing(RandomAgent):
             ####
             board.unmake_move()
         no_lose_opt = [x for x in options if x not in no_move]
+        if no_lose_opt == []:
+            no_lose_opt = options
         return no_lose_opt
 
 

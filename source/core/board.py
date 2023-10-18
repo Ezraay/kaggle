@@ -14,22 +14,6 @@ class Board:
         self.__size = size
         self.history = []
 
-    def create_existing(self, size: tuple[int, int], board: list[int]):
-        self.__size = size
-        self.__heights = [0 for _ in range(size[0])]
-        self.__board = [[EMPTY_PIECE for _ in range(size[1])] for _ in range(size[0])]
-        self.history = []
-
-        for x in range(self.width):
-            for y in range(self.height):
-                piece = board[(self.height - y - 1) * self.width + x]
-                self.__board[x][y] = piece
-                if piece == EMPTY_PIECE:
-                    self.__heights[x] = y
-                    break
-            else:
-                self.__heights[x] = self.height
-
     @property
     def width(self):
         return self.__size[0]
@@ -149,9 +133,6 @@ class Board:
             if y != 0:
                 result += "\n"
         return result
-
-    def __repr__(self):
-        return str(self)
 
     def copy(self):
         """Create a deep copy of the current board."""
