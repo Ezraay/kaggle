@@ -24,7 +24,7 @@ def main_code():
         agent1: Agent = agent1_class()
         agent2: Agent = agent2_class()
         results = [0, 0, 0, 0]
-        progress_slices = 30
+        progress_slices = 10
 
         for i in range(count):
             board = Board()
