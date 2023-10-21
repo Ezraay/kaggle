@@ -63,7 +63,6 @@ class Visualiser:
                         self.__board.make_move(column, current_turn)
                         current_turn = 3 - current_turn
                         running = self.__board.get_board_state(self.__in_a_row) == GameState.IN_PROGRESS
-                        print(self.__board)
             self.__display.draw(self.__board)
 
     def player_versus_agent(self, agent: Agent, player_starts: bool):
