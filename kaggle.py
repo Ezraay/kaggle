@@ -8,7 +8,7 @@ def agent(observation, configuration):
     board = Board()
     board.create_existing(size, observation.board)
     my_piece = observation.mark
-    agent = SmartMinimaxAgent(2)
+    agent = SmartMinimaxAgent(4)
     return agent.get_move(board, my_piece, configuration.inarow)
 
     # board = observation.board

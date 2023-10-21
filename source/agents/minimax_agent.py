@@ -54,50 +54,21 @@ class MinimaxAgent(Agent):
         board_state = board.get_board_state(in_a_row)
 
         if board_state == opponent_piece:
-            return -1000, self.depth - depth + 1
+            return -1000
         if depth == 0:
             if board_state == GameState.TIE:
-                return 0, self.depth - depth + 1
-            return current_eval, self.depth
+                return 0
+            return current_eval
 
         options = [x for x in list(range(board.width)) if board.can_make_move(x)]
         best_evaluation = -999999
-        best_depth = 1000
         for move in options:
             board.make_move(move, my_piece)
-            evaluation, depth_to_win = self.minimax(board, depth-1, opponent_piece, in_a_row)
-            evaluation = -evaluation
-            if evaluation > best_evaluation or (evaluation == best_evaluation and depth_to_win < best_depth):
+            evaluation = -self.minimax(board, depth-1, opponent_piece, in_a_row)
+            if evaluation > best_evaluation:
                 best_evaluation = evaluation
-                best_depth = depth_to_win
-            # best_evaluation = max(evaluation, best_evaluation)
             board.unmake_move()
-        return best_evaluation, best_depth
-
-
-        # if max_player:
-        #     max_eval = -99999999
-        #     options = [x for x in list(range(board.width)) if board.can_make_move(x)]
-        #     random.shuffle(options)
-        #
-        #     for move in options:
-        #         new_b = board.copy()
-        #         new_b.make_move(move, player)
-        #         eval = self.minimax(new_b, depth - 1, False, player, opponent, in_a_row)
-        #         max_eval = max(max_eval, eval)
-        #     return max_eval
-        #
-        # else:
-        #     min_eval = 99999999
-        #     options = [x for x in list(range(board.width)) if board.can_make_move(x)]
-        #     random.shuffle(options)
-        #
-        #     for move in options:
-        #         new_b = board.copy()
-        #         new_b.make_move(move, opponent)
-        #         eval = self.minimax(new_b, depth - 1, True, player, opponent, in_a_row)
-        #         min_eval = min(min_eval, eval)
-        #     return min_eval
+        return best_evaluation
 
     def get_move(self, board: Board, my_piece: int, in_a_row: int) -> int:
         best_evaluation = -999999
@@ -109,13 +80,10 @@ class MinimaxAgent(Agent):
 
         for move in options:
             board.make_move(move, my_piece)
-            # evaluation = self.minimax(new_b, self.depth - 1, maximise, my_piece, opponent, in_a_row)
-            evaluation, depth = self.minimax(board, self.depth - 1, 3 - my_piece, in_a_row)
-            evaluation = -evaluation
-            if evaluation > best_evaluation or (evaluation == best_evaluation and depth < best_depth):
+            evaluation = -self.minimax(board, self.depth - 1, 3 - my_piece, in_a_row)
+            if evaluation > best_evaluation :
                 best_move = move
                 best_evaluation = evaluation
-                best_depth = depth
             board.unmake_move()
 
         # print(best_evaluation)
